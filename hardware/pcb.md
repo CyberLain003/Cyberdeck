@@ -147,11 +147,11 @@ General discipline [S3] §6 (all to be re-verified at build):
 | **USB2 OTG-able** | USB_1 D 165/163, ID pin, VBUS sense, EN/OC | Very short run to Type-C. D± both sides of C connector tie together (no mux needed for USB2.0-only) [S1] §2.4.2; TUSB321-class CC→ID logic if C-DRD role needed (C-receptacle or Micro-AB recovery; TBD by connector choice) |
 | **PCIe Gen3 ×1 → M.2 M-key 2280** | PCIE_1_CLK ± 228/226; RX 234/232; TX 240/238; RESET 244; WAKE 252 [S1] §2.2.1 | REFCLK pair keeps ≤150 µm intra-pair skew; 100 MHz ref clk, one load only (M.2 card); reset level-shift 1.8→3.3 V (M.2 PERST# level) per [S1] §2.2.2.1; NO hot-plug supported (ignore M.2 presence detect); 3.3 V only supply (no 12 V needed on M.2 — good for battery) |
 | **HDMI out** | TXC 69/67; TXD0 75/73; TXD1 81/79; TXD2 87/85; CEC 63; HPD 61; DDC I2C_3 57/59 [S1] §2.5.1 | All 4 pairs from the B2B onto L1 near-parallel, clk↔data ≤22 mm skew; level-shift DDC/HPD 1.8→5 V domain (PCA9306-class), CEC 3.3 V; ESD small Cap-TVS; HDMI 5 V 50 mA rail gated via switch [S1] §2.5.2 |
-| **DSI 4-lane → Vu8S via small FPC adapter** | CLK 37/35; D0 49/47; D1 43/41; D2 31/29; D3 25/23; I2C_2_DSI 53/55; PWM_3 (backlight) 19; GPIO 17/21 [S1] §2.6.1 | 4 data + clk pairs → 0.5 mm FFC / mini FPC land at edge; keep total (carrier + flex) ≤200 mm; clk↔lane ≤1.5 mm; backlight PWM + BL-enable + DSI I2C 1.8 V (level-shift if panel I/O is 3.3 V) [S1] §2.6; **exact ODROID-M1S (Vu8S) FPC connector pitch/pin-count TBD (RISK-024) — source the kit first, then lock the adapter** |
+| **DSI 4-lane → Raystar RFU800G via small FPC adapter** | CLK 37/35; D0 49/47; D1 43/41; D2 31/29; D3 25/23; I2C_2_DSI 53/55; PWM_3 (backlight) 19; GPIO 17/21 [S1] §2.6.1 | 4 data + clk pairs → 0.5 mm FFC / mini FPC land at edge; keep total (carrier + flex) ≤200 mm; clk↔lane ≤1.5 mm; backlight PWM + BL-enable + DSI I2C 1.8 V (level-shift if panel I/O is 3.3 V) [S1] §2.6; **exact Raystar RFU800G FPC connector pitch/pin-count TBD (RISK-024) — source the panel first, then lock the adapter** |
 | **GbE MDI (on-module PHY, 1st)** | MDI0 225/227, MDI1 233/231, MDI2 239/241, MDI3 245/247; LED1 235, LED2 237 | conn→magnetics ≤100 mm in 95 Ω pairs; RJ45 w/ integrated magnetic preferred; no center-tap/transformer power (voltage-mode PHY) [S1] §2.3.1; if discrete mag, isolated mag-GND island ≥2 mm [S3] §7.3 |
 | **RGMII spare MAC (ETH_2)** | RXC 197, RX_CTL 199, RXD3..0 207/205/203/201, TXC 213, TX_CTL 211, TXD3..0 215/217/219/221, MDC 193, MDIO 191, INT 189 [S1] §2.3.2.1 | 1.8 V I/O. 50 Ω SE, MDIO pull-up 1.8 V; PHY strapping must not collide with the on-module PHY address (default address 00 111) → choose a different strap; **KSZ9131RNX (1.8 V capable) preferred [S1] §2.3.2.2**; group match TXC↔TXD and RXC↔RXD ≤1–2 mm; connector-side magnetics same as §5. Not populated in v1 (spare MAC documented) |
 | **SD/MMC/SDIO (full-size)** | D0..3 80/82/70/72, CMD 74, CLK 78, CD 84, PWR_EN 76 [S1] §2.8.1 | 50 Ω SE, clk↔data ≤~15 mm (HS) and design for SDR104 (≤3 mm); no pull-ups (on module); VCC3.3 only via MIC94073 switch (SD_1_PWR_EN 1.8/3.3 V tolerant); ESD optional [S1] §2.8.2 |
-| **USB2 Wi-Fi (RTL8821CU)** + **USB2 LTE (EC25)** | mPCIe pins 36/38 (USB_D±), UIM on 8/10/12/14/16 [S1] §2.2.2.2 | Both are USB2 — route 90 Ω diff, short; **host-side topology TBD: two dedicated USB2 host ports if Verdin i.MX8MP "module-specific" pins expose them, else one USB2513-class 2.0 hub (see §13 open items)**; SIM holder wired to mPCIe UIM; EC25 3.3 V on mPCIe 3V3 pins; Wi-Fi module 3.3 V + u.FL |
+| **On-module Wi-Fi/BT (SoM "WB")** + **USB2 LTE (tiny-LGA)** | Wi-Fi/BT = antenna coax (u.FL) from SoM; LTE = USB2 D± on a connector-adjacent pad area [S1] §2.2.2.2 (USB pattern) | Wi-Fi/BT needs **no discrete module and no USB data lane** — only U.FL coax to the lid (DEC-046). LTE is USB2 — route 90 Ω diff, short; **LTE + deck-HID share one USB2513-class 2.0 hub upstream of SoM USB_2 (DEC-049, see §13)**; nano-SIM holder on the carrier near the tiny-LGA radio; LGA module direct-soldered (~ESP32-WROOM footprint, ≤~30 mm, DEC-058), no mPCIe slot |
 
 ---
 
@@ -163,7 +163,7 @@ Carrier receives **12 V / 5 V / 3.3 V + GND** from the daughterboard power tree 
 | Net | From | Primary loads | Copper/entry strategy |
 |---|---|---|---|
 | **VCC (module 5 V feed)** | 5 V rail, always-on (STR–Module OFF keeps VCC on [S1] §3.1) | SoM VCC pins 251/253/255/257/259 (3.135–5.5 V; SoM ≤8.25 W sustained / 12.5 W peak form-factor [S1] §3.1; this SKU ~1.5–6.3 W) | star from entry to module pins; ≥1 via/A rule |
-| 3.3 V | daughterboard | M.2 NVMe (≤3 A), codec, Wi-Fi module, LTE (3.3 V), SD VCC3.3, level-shift VCCB, RJ-45 LED pull | separate plane L3 split, ≥4 A |
+| 3.3 V | daughterboard | M.2 NVMe (≤3 A), codec, LTE tiny-LGA (3.3 V), SD VCC3.3, level-shift VCCB, RJ-45 LED pull | separate plane L3 split, ≥4 A |
 | 5 V | daughterboard | USB VBUS (900 mA×2 via switches), fan (5 V), HDMI 5 V(50 mA) | plane/wide trace ≥2 A |
 | 12 V | daughterboard | **reserve** – currently no mandatory load (M.2 needs only 3.3 V; no full PCIe slot) | keep light; C-plate ~100 µF |
 | 1.8 V (PWR_1V8_MOCI pin 214) | **module output**, 250 mA [S1] §3.1.1 | codec/control logic, level-shift VCCA, DSI I2C | short to the parts; not derived from carrier rail |
@@ -175,7 +175,7 @@ Carrier receives **12 V / 5 V / 3.3 V + GND** from the daughterboard power tree 
 - Per-IC decoupling: 100 nF + 10 nF at every supply pin; array near each interface block (M.2, PHY-magnetics, codec, modem, Wi-Fi).
 - SoM VCC pins: 1 × 100 nF + closest 10 µF within the allowed 0.8 mm "next to connector" band ([S1] §4.2/§4.5); series net is star, not daisy.
 - Avoid backfeeding: UART/I2C/HDMI CEC must not power an un-powered domain; use open-drain + level-shifters with OE gated by CTRL_SLEEP_MOCI# for high-side parts ([S1] §3.5.5).
-- Power-sequencing: CTRL_PWR_EN_MOCI stays high in sleep for always-on carrier parts; CTRL_SLEEP_MOCI# controls sleep-able blocks (Wi-Fi/LTE/M.2/fan can sleep) ([S1] §3.1.2, Table 41 + [S3] §6.8 stitching).
+- Power-sequencing: CTRL_PWR_EN_MOCI stays high in sleep for always-on carrier parts; CTRL_SLEEP_MOCI# controls sleep-able blocks (LTE/M.2/fan can sleep; on-module Wi-Fi/BT sleeps with the SoM) ([S1] §3.1.2, Table 41 + [S3] §6.8 stitching).
 
 ---
 
@@ -184,16 +184,17 @@ Carrier receives **12 V / 5 V / 3.3 V + GND** from the daughterboard power tree 
 ```
   ←— front of base (battery bays / keyboards edge) — (no connectors)
   ┌───────────────────────────────────────────────────────────────┐
-  │ L3 PWR plane stitch caps along rail necks        │  FAN duct  │
-  │                                             [FAN] │   (5-7mm)  │
-  │  [WIFI RTL8821CU]    ╔══════════════════╗  [SoM HEATSINK]      │
-  │   u.FL→window        ║  B2B + Verdin   ║   zone (5–7 mm,      │
-  │                       ║   (centered)   ║    finned, duct→rear)│
-  │                      ╚══════════════════╝                       │
-  │   [LTE mPCIe EC25 + nano-SIM beneath]      [M.2 M-key 2280]    │
-  │      (SIM near slot)                        (edge, serviceable) │
-  │  [CODEC I2S + line-out]   [RGMII spare PHY KZ9131 – NC v1]     │
-  │  [USB2 hub* (TBD)]                                               │
+  │ L3 PWR plane stitch caps along rail necks        │ intake ◄───│
+  │                                          [FAN]  │ (L-back)   │
+  │  [SoM on-module Wi-Fi/BT]            ╔══════════════════╗ →R  │
+  │   u.FL coax → lid-top               ║  B2B + Verdin   ║ exh  │
+  │                       (right palm  ║  (centered)      ║ DUCT │
+  │                      rest zone)    ║  + HS 5–7 mm     ║ fins │
+  │                                    ╚══════════════════╝ →R side
+  │   [LTE tiny-LGA (EC200U-class) + nano-SIM]   [M.2 M-key 2280]│
+  │      (direct-solder; SIM near radio)           (edge, service)│
+  │  [CODEC I2S + line-out]   [RGMII spare PHY KSZ9131 – NC v1]  │
+  │  [USB2 hub USB2513 (DEC-049)]                                │
   └────────────────────────────────────────────────────────────────┘
           Carrier rear edge (this face is the connector bay):
    [HDMI out] [USB3 A] [USB2 OTG C] [RJ45 w/ mag] [3.5 AUX] [SD full]
@@ -203,11 +204,11 @@ Carrier receives **12 V / 5 V / 3.3 V + GND** from the daughterboard power tree 
 Rules:
 - **SoM centered** so its heatsink sits over the CPU with the fan duct unobstructed; fan axis along the fins of the heatsink; SoM edges get S1/S2 (2.5 mm) + S3/S4 (7.0 mm) stand-offs — heatsink (B-014) picks up those bosses [S1] §4.4.
 - **M.2 near an edge** (opens service access, not under heatsink duct); 3.3 V bulk next to it; keep-out for double-sided cards; screw post at 2280 hole (and provide 2242/2260 scoring posts as optional).
-- **LTE mPCIe + SIM**: SIM slot adjacent to the mPCIe socket (short UIM traces); mPCIe socket + latch in the chassis keeps vibration; EC25 is USB-only, PCIe lines left NC [S1] §2.2.2.2.
-- **Wi-Fi module at an RF-window edge** (top deck lid RF window [RISK-013]), u.FL→aperture antenna; keep ≥25 mm from SoM/radios.
+- **LTE tiny-LGA + SIM**: direct-solder LGA radio (~ESP32-WROOM footprint, ≤~30 mm, DEC-058) near the nano-SIM holder (short UIM/USB traces); no mPCIe slot. USB2-only; keep ≥25 mm from SoM/radios.
+- **Wi-Fi/BT (on-module, SoM "WB")**: radio on the SoM; antenna coax (u.FL) up the hinge to the **RF-transparent plastic lid-top** behind the screen (DEC-046/055) — no discrete module on the carrier, no RF aperture in the aluminum deck.
 - **Codec** near the 3.5 mm AUX jack, analog-GND island, output stage out of the fan duct.
 - **Ports (HDMI/USB/RJ45/AUX/SD)** at the carrier rear edge; **connectors with big pads get GND-fill keep-out under pads** ([S3] §6.5) and edge copper ≥0.5 mm clearance.
-- **Fan** on a 5 V PWM (MCU-controlled) in the duct; tach to MCU.
+- **Fan** (**Delta BFB0305HA-C blower**, primary) on 5 V in the duct — inlet from the left-back intake, blowing **left→right through the heatsink fins** to the right-side exhaust (DEC-062); control = low-side PWM/voltage, **TBD (RISK-027; Delta -C is 2-wire, no tach)**; Sunon HA30101V4 axial retained as fallback.
 
 ---
 
@@ -223,7 +224,7 @@ Carrier rear edge (main, out the chassis rear):
 | E4 | GbE | RJ45 with integrated magnetics | ETH_1 MDI (on-module KSZ9131) | LED1/2 to jack LEDs; 1000Base-T |
 | E5 | AUX 3.5 mm | stereo TRS jack | I2S codec line-out | no speaker amp (REQ-KB-02) |
 | E6 | SD slot | full-size push-pull | SD_1 bus + PWR_EN/cd + 3.3 V switch/LDO | REQ-IO-05 |
-| E7 | LTE antennas (2× U.FL) + Wi-Fi (1× u.FL) | U.FL | to rear/top RF windows | RISK-013 |
+| E7 | LTE antennas (2× U.FL) + Wi-Fi/BT coax (1× u.FL) | U.FL | up the hinge to plastic lid-top (RF-transparent, DEC-055) | RISK-013 |
 
 Daughterboard (behind/under the carrier rear edge, its OWN rear face):
 
@@ -243,10 +244,10 @@ Daughterboard (behind/under the carrier rear edge, its OWN rear face):
 ## 9 Thermal Construct (heatsink + fan path)
 
 - Heatsink (B-014): **5–7 mm finned (al) block** on top of SoM (module is 6.0 mm tall; heatsink base on BGA/SoC area), kept under the ~35 mm module area; mounted to stand-offs S1/S2/S3/S4 (2.5 / 7.0 mm heights [S1] §4.4) — a sink that screws onto those bosses solves retention + keeps parallel.
-- Fan (B-013 Sunon HA30101V4, 30×30×10, 5 V, 0.3 W, 15.1 dBA): axial pusher drawing air **through the finned heatsink**, ducted to **rear/side vents** (RISK-003/016). 5 V PWM from the power-MCU, profiled by the SoC temperature sensor read over I2C.
-- Air gap path must not short-circuit (fan outlet close to vent face); keep M.2/antenna out of the direct duct.
+- Fan (B-013): **primary = Delta BFB0305HA-C blower** (30×30×10, 5 V, 0.65 W, 29 dBA, 1.45 CFM, 0.285 inH₂O); **Sunon HA30101V4 axial (0.30 W, 15.1 dBA) is the fallback** (`hardware/thermal.md` §2). Ducted air path per DEC-062: **left-back intake louvres → fan (in-plane, left of the heatsink) → heatsink fins L→R → right-side exhaust**. 5 V control from the power-MCU, profiled by the SoC temperature sensor read over I2C; low-side PWM/voltage TBD (RISK-027 — Delta -C is 2-wire, no tach).
+- Air gap path must not short-circuit (fan outlet close to the heatsink fin mouths; intake louvre plenum upstream); keep M.2/antenna coax out of the direct duct.
 - z-budget: heatsink 7 mm + module 6 mm (socket 5.2 + 2.62 b2b = module top ≈8 mm over carrier) + 0.5 clearance ≈ **~16 mm** from carrier → fits 50 mm stack (base 30 mm electronics plane + deck) with margin [S1] §4.1/4.2.
-- SoM peak form-factor 8.25 W sustained / 12.5 W peak [S1] §3.1 is the thermal design point; our 8 GB SKU measured ~1.5–6.3 W (E-009), so 5–7 mm + 3.5 CFM is margin but validate on bench (RISK-016).
+- SoM peak form-factor 8.25 W sustained / 12.5 W peak [S1] §3.1 is the thermal design point; our 8 GB SKU measured ~1.5–6.3 W (E-009), so 5–7 mm + the Delta blower's 0.285 inH₂O static pressure is margin but validate on bench (RISK-016).
 
 ---
 
@@ -276,8 +277,8 @@ Prices are snapshots (stale within weeks). Access date 2026-08-30 for all eviden
 |---|---|---|--:--:|---|--:--:|---|---|---|
 | B2B socket (SoM) | TE 2309409-2 (recommended) | SMD (DDR4-SODIMM, 5.2 mm) | 1 | €1.655 @1 / €1.472 @100 | TE.com via Octopart [S6] | 2026-08-30 | stock 13,376; Amphenol alt TBD |
 | M.2 | M-key 2280 socket (NGFF) | SMD, 0.5 mm, M-key (75-position) | 1 | TBD | TBD | — | standard M.2, M-key only; supplier-confirm key-block geometry (see §13 open) |
-| mPCIe slot (LTE) | mini-PCI-e 52p 3.2 mm | SMD | 1 | TBD | TBD | — | EC25-EU in it; USB-only wiring |
-| nano-SIM holder | nano-SIM 6-pad push-push | SMD | 1 | TBD | TBD | — | UIM to mPCIe |
+| LTE radio (tiny-LGA) | Quectel EC200U-EU-class LGA (~ESP32-WROOM footprint, ≤~30 mm) | SMD | 1 | TBD | TBD | — | Cat-1; re-research bands/power/price (DEC-058) |
+| nano-SIM holder | nano-SIM 6-pad push-push | SMD | 1 | TBD | TBD | — | UIM/USB to tiny-LGA radio |
 | RJ45 w/ mag | 1000Base-T jack w/ LED | THT | 1 | TBD | TBD | — | integrated magnetics (voltage-mode PHY) [S1] §2.3.1 |
 | RGMII spare PHY | KSZ9131RNX (or KSZ9031) | QFN-48 | NC in v1 | TBD | TBD | — | spare MAC documented; pop for 2nd port |
 | Codec (line-out) | TI TLV320AIC3104-class, mainline drivers | TQFN/SOIC | 1 | ~€2–3 (TBD) | TBD | — | I2S + I2C control, line-out only |
@@ -289,7 +290,7 @@ Prices are snapshots (stale within weeks). Access date 2026-08-30 for all eviden
 | Power switches | TI TPS2066-class (USB), MIC94073 (SD) | SO-8 | ~3 | TBD | TBD | — | OC# to SoM pins |
 | Bulk/decoupling | 0402/0805: 100 nF, 10 µF; 1210/3520 100 µF 10 V | 0402–3520 | ~180 | ~€3–6 (TBD) | TBD | — | per rail + SI-method |
 | Ferrite | 120 Ω@100 MHz, 3 A | 0603 | ~5 | TBD | TBD | — | rail entry |
-| DSI FPC adapter | 0.5 mm FFC → Vu8S (ODROID-M1S) | custom flex | 1 | TBD | TBD | — | RISK-024 open; lock after Vu8S kit |
+| DSI FPC adapter | 0.5 mm FFC → Raystar RFU800G | custom flex | 1 | TBD | TBD | — | RISK-024 open; lock after Raystar panel |
 | USB2 hub (if needed) | SMSC/MC USB2513-class | QFN48 | 1 (opt) | ~€1.5–3 | TBD | — | only if module-specific USB2 hosts run short (§10) |
 | Carrier PCB | 6L user design | 1.6 mm, controlled-Z | 1 | ~€20–35 (CN walk, 6L) | PCBWay | TBD quote | B-005 + B-006 assembly backed in |
 | Heatsink/fan/SoM/etc | see B-001/B-013/B-014/B-011/B-012 | — | — | — | — | — | unchanged from `bom/bom.md` |
@@ -308,7 +309,7 @@ Board gap per DEC-018/RISK-015: high-speed **never crosses**; only low-speed con
 |---|---|---|---|
 | Power MCU link | I2C_1 (SCL/SDA pin 14/12) | 1.8 V, pull-ups carrier-side | SoM→MCU (REQ-PWR-03/04) |
 | Pogo UART control | UART_1 or UART_2 (RX/TX 1.8 V) + EN + level-mode | 1.8 V | front-end (level-shift/ESD/polyfuse) lives on daughterboard near pogo (REQ-UART-01) — see `hw/uart.md` |
-| Fan control | PWM + tach | 3.3 V | to Sunon fan drive (DB) |
+| Fan control | low-side PWM / voltage; tach N/A (2-wire Delta -C) | 5 V | to fan drive (DB; RISK-027, DEC-062) |
 | Power sequencing monitor | CTRL_FORCE_OFF, CTRL_SLEEP_MOCI#, CTRL_PWR_EN | 1.8 V | DB can honor sleep-able rail gating [S1] §3.1.2 |
 | Buttons/LEDs | PWR_BTN_MICO#, CTRL_RESET_MICO# (in), user LEDs + battery LED | 1.8 V OD | power state to MCU |
 | Wake | CTRL_WAKE1_MICO# | 1.8 V | MCU-derived wake into SoM [S1] Table 41 |
@@ -337,8 +338,8 @@ HDMI, USB3 SS, USB2 on USB_1/USB_2, PCIe/ref-clk to M.2, SD/MMC, DSI+backlight-P
 | Item | Impact | Recommended resolution |
 |---|---|---|
 | **M.2 hardware-block vs B+M SATA** — M-key-only socket blocks B-key-only cards, but **B+M-key SATA 2280 cards carry both notches and physically fit an M-socket** (their design intent, [S5]); keying alone does not exclude them | REQ-COMP-03 wanted "only NVMe physically fits" | Keep M-key socket + silkscreen **"NVMe M.2 2280 ONLY"** (per DEC-033) as the mechanical marker; add a **chassis/PCB boss interlock** (final-geometry study) OR accept functional lock-out (no SATA on the PCIe×1 lane) and document. **Decision required with user.** |
-| USB2 hosts for Wi-Fi (RTL8821CU) and LTE (EC25) | 2 devices need USB2; only USB_1(OTG)/USB_2(host) on standard pins | Verify **Verdin i.MX8MP module-specific pins expose extra USB2** (`TBD` in S4 datasheet §module-specific); else one **USB2513-class USB2 hub** upstreams into the dedicated port (SS lane stays unshared → ≥1 Gbit/s effective still met) |
-| Vu8S (ODROID-M1S) FPC connector pitch/pin-count | RISK-024 | Source the Vu8S kit first, then lock the 0.5 mm FFC adapter + its keep-out at the carrier edge |
+| USB2 hosts for LTE (tiny-LGA) + deck-HID | 2 USB2 devices; only USB_1(OTG)/USB_2(host) on standard pins | One **USB2513-class USB2 hub** (DEC-049) upstreams both into SoM USB_2 host (SS lane stays unshared → ≥1 Gbit/s effective still met); verify **Verdin i.MX8MP module-specific extra USB2** (`TBD` in S4 datasheet §module-specific) as an alternative |
+| Raystar RFU800G FPC connector pitch/pin-count | RISK-024 | Source the Raystar panel first, then lock the 0.5 mm FFC adapter + its keep-out at the carrier edge |
 | M.2 socket exact PN + key-geometry data | blocking detail | Ask TE/JAE/Amphenol for the M-key 2280 socket land pattern + mechanical spec; keep the M-only variant |
 | Exact receptacle choices (Type-C vs A; OTG C vs Micro-AB) | mux/ID-logic count | fixed at schematic review (Type-C receptacles need TUSB321-class CC logic for USB2; TUSB546/1042-class SS mux for USB3 orientation) |
 | Codec final (line-out) + drivers | REQ-KB-02 | pick a mainline (kernel ≥ 4.19) part, e.g., TI TLV320AIC3104-class; bench output levels |
@@ -354,7 +355,7 @@ HDMI, USB3 SS, USB2 on USB_1/USB_2, PCIe/ref-clk to M.2, SD/MMC, DSI+backlight-P
 - **B2B**: TE 2309409-2 (5.2 mm, €1.655 @1, stock) + S1–S4 stand-offs; never populate under the module (except ≤0.8 mm band).
 - High-speed: short, GND-referenced, per-interface skew budgets; all on carrier only; rear connector bay carries HDMI/USB3/USB2-OTG/RJ45/AUX/SD; daughterboard keeps PD, pogo-UART front-end, power rails + battery contacts at its front edge.
 - Power: 12/5/3.3 V entered + star-gated; VCC from always-on 5 V; SoM pins 251–259; per-rail ferrite + bulk caps; no user-BGA anywhere — every carrier part is a THT/SMD footprint the user can place.
-- Thermal: 5–7 mm finned sink on SoM bosses + Sunon axial fan ducted to vents, within the 50 mm stack.
+- Thermal: 5–7 mm finned sink on SoM bosses in the right palm-rest zone + **Delta blower primary (Sunon axial fallback)** ducted left→right (left-back intake → right-side exhaust, DEC-062), within the 50 mm stack.
 - DFM: teardrops, ≥6-mil rules, PTH vias ≥0.3/0.6, ≥0.5 mm edge clearance, silkscreen “NVMe M.2 2280 ONLY”.
 - Board split freezes RISK-015: only I2C/UART/PWM/GPIO/buttons/wake + the three power rails + GND cross the gap.
 

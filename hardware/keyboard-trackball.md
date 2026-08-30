@@ -19,7 +19,7 @@ Strict evidence rule: geometry/pricing quotes are targets until quoted; `TBD` = 
 - Min key **~8 mm**, pitch **~12 mm netbook-class** (row step 9.5–10 mm, key width 11–12 mm) — RISK-010/014.
 - **Integrated trackball** mounted **below the space bar, between G-H-B**, small **15–21 mm ball** — DEC-025, RISK-020.
 - Aluminum top-deck cutouts (A-016/A-022).
-- 130 mm base depth budget: keyboard + trackball + palm rest must fit (RISK-010).
+- **140 mm base depth budget** (envelope 200×140×50, DEC-043): keyboard + trackball + palm rest must fit. **Keyboard top edge at 10% depth, bottom edge 40% from the bottom; palm rest = front 40%; SoM + 5–7 mm heatsink + 30 mm fan in the RIGHT palm-rest zone** (DEC-053/061).
 
 ---
 
@@ -49,11 +49,11 @@ Standard 14-column scan matrix; **ISO-DE Enter** is the 2U-tall L-key at the far
 |---|---|---|
 | Row step (vertical) | **9.5–10.0 mm** | 6 rows ≈ 57–60 mm stack |
 | Key width (1U) | **11–12 mm** | min key body ≥ 8 mm (REQ-KB-01) |
-| Keyboard block width | ≈ 12 × 12 mm ≈ **144–156 mm** | must fit inside 170 mm base ≤ ~156 mm (excl. chassis walls) |
+| Keyboard block width | ≈ 12 × 12 mm ≈ **144–156 mm** | fits inside 200 mm base (interior 194, excl. chassis walls) |
 | Keyboard block depth | 6 × 10 ≈ **60 mm** | + function-row half: ~64 mm |
 | Trackball zone | below space bar, between G-H-B | ≈ 14 mm deep well (see §4) |
-| Palm rest | ≈ 25–30 mm | |
-| **Total base depth** | ≈ 100–110 mm | within 130 mm (RISK-010 OK, margin ~20 mm) |
+| Palm rest | **front 40% ≈ 56 mm** | DEC-061; SoM + thermal tower in the **right** palm-rest zone (DEC-053) |
+| **Keyboard placement band** | **10% → 40%-from-bottom ≈ 70 mm** | DEC-061: keyboard block (60–64 mm) fits the band with margin |
 
 ### 2.3 Function row decision
 
@@ -72,7 +72,7 @@ Two options (constraint allows both). **Option A recommended** (zero host-driver
 Membrane 6×14 (diodes) ──► MCU @ deck     ADNS-9800 ──(SPI)──► MCU
                                  MCU ──(USB 2.0 device)──► SoM root USB2 (internal header)
 ```
-- Small MCU (e.g., RP2040 / ATmega32U4 / STM32F1-class, ~€3–6) scans the matrix (1 kHz, debounce in FW) + reads the trackball sensor (SPI, via HID mouse endpoint) → **composite HID (keyboard + mouse)**.
+- Small MCU — **STM32G0-class recommended (DEC-045)** — lowest-power USB-HID that works (M0+, USB FS); RP2040 / ATmega32U4 are acceptable alts. Scans the matrix (1 kHz, debounce in FW) + reads the trackball sensor (SPI, via HID mouse endpoint) → **composite HID (keyboard + mouse)**.
 - Host sees a normal `usbhid` keyboard+mouse — **no kernel driver, no `linux-firmware` dependency**, works in U-Boot/bootloader (useful for recovery).
 - 🔲 Firmware: small custom HID report descriptor; open source in-repo (Phase 7). No proprietary blobs.
 - **Cost:** MCU board ~€4 + 1 USB-A/C internal header (part of carrier BOM).
@@ -122,7 +122,7 @@ ADNS-9800     ── SCK  ──►  host SPI-SCK
 
 - **Well below the space bar, between G-H-B** (row 4, under the G/H/B cluster — the palm-rest side of the space bar).
 - Ball well: pocket Ø ≈ (ball Ø + 0.5–1 mm) in the aluminum top deck; ball center ≈ 0.5–0.7×Ø below deck surface so the top 1–2 mm of the sphere protrudes for finger/thumb access. Sensor + lens mounting hole at the bottom of the well, optical axis toward the ball surface at datasheet elevation.
-- Depth budget: recessed well ≈ 12–15 mm under the deck — fits the 130 mm stack (RISK-010), clears the carrier below.
+- Depth budget: recessed well ≈ 12–15 mm under the deck — fits the 140 mm depth stack (RISK-010), clears the carrier below.
 
 ### 4.3 Small-ball caveat (RISK-020) — MUST TEST
 
@@ -144,7 +144,7 @@ ADNS-9800     ── SCK  ──►  host SPI-SCK
 | Keyboard opening | ≈ 156 × 64 mm (+F-row: ~160 × 68) wide/tall opening; 12 mm pitch block |
 | Key well depth | membrane + 3–4 mm standoff under deck; ~8 mm keycap travel available |
 | Trackball well | Ø 15–22 mm pocket below G-H-B; sensor/lens aperture at bottom |
-| Palm rest | flat zone 25–30 mm below ball |
+| Palm rest | **front 40% flat zone (≈56 mm)**; SoM + thermal tower under the **right** half (DEC-053/061) |
 | RF windows | remain per RISK-013 (antennas) — do not cover with key section |
 
 ---
@@ -154,7 +154,7 @@ ADNS-9800     ── SCK  ──►  host SPI-SCK
 | Item | € | Source |
 |---|---|---|
 | Membrane PCB + overlay + dome (custom, DE/CN quote) | **30–60** | B-015 |
-| Deck MCU (RP2040-class) — Option A | **3–6** | BOM estimate |
+| Deck MCU (**STM32G0-class**, DEC-045; RP2040 alt) — Option A | **3–6** | BOM estimate |
 | ADNS-9800 sensor | ~1.25 | B-016 |
 | Lens kit | ~2 | `TBD` |
 | Ball 15–21 mm + socket | ~5–10 | `TBD` |

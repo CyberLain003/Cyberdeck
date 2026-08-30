@@ -1,6 +1,6 @@
 # Parts — Candidates (Phase 4)
 
-Status: **Phase-4 sourced research** — 2026-08-30. Every row has source URL + access date. **Candidate = has evidence; not yet "Recommended"** (strict rule: Recommended requires dimensions + interfaces + Linux/NixOS + price/availability + envelope/power/thermal/budget impact — full verdict lands after budget model Phase 5 + acceptance planning). Prices are **snapshots**, stale within weeks.
+Status: **Phase-4/5 sourced research, reconciled to Phase-6 decisions** — 2026-08-30. Every row has source URL + access date. **Candidate = has evidence; not yet "Recommended"** (strict rule: Recommended requires dimensions + interfaces + Linux/NixOS + price/availability + envelope/power/thermal/budget impact — full verdict lands after budget model + acceptance planning). Prices are **snapshots**, stale within weeks.
 
 ## 1. Battery cells (8× 21700, 2× 4S1P packs)
 
@@ -29,7 +29,7 @@ Evidence (Toradex datasheet Rev 1.8 dated 2026-06-22, docs.toradex.com/116795; p
 |---|---|
 | CPU/RAM | 4× Cortex-A53 @1.6 GHz (8GB IT SKU), +M7; **8 GB LPDDR4 inline-ECC (PN 0070)**; 32 GB eMMC |
 | Native interfaces | **USB 3.1 Gen1 host; USB 2.0 OTG; MIPI-DSI quad-lane (up to 1080p60); HDMI 2.0 TX; dual GbE (1× on-module PHY + 1× RGMII); PCIe Gen3 ×1 (Reserved)** |
-| **SATA** | **NOT available on any pin** → SSD must use PCIe→SATA bridge (see §3) |
+| **SATA** | **NOT available on any pin** → **M.2 2280 NVMe direct on PCIe Gen3 ×1** (DEC-033; no bridge, see §3) |
 | B2B connector | **DDR4 SODIMM epage, 260-pin, 0.5 mm**; TE 2309409-2 socket; Toradex "Direct Breakout™" → diff pairs routable on 4-layer |
 | Dimensions | 69.6×35.0×6.0 mm module; ~9–13 mm over carrier with socket |
 | Power | vendor rating 1.5–6.3 W; **measured idle headless 1.44–1.7 W, idle+scren 1.7–2.5 W, STR 0.10–0.18 W, max ~5 W mean** |
@@ -47,7 +47,7 @@ Evidence (Toradex datasheet Rev 1.8 dated 2026-06-22, docs.toradex.com/116795; p
 - **Verdin has no SATA ⇒ M.2 2280 NVMe on PCIe Gen3 ×1**, direct (no bridge chip — DEC-027 superseded by DEC-033).
 - **Keying/silkscreen blocking (user requirement):** socket **M-key only**, silkscreen stating "NVMe M.2 2280 ONLY", physical keying prevents a B/B+M SATA drive from being inserted. Only the correct drive fits.
 - PCIe Gen3 ×1 ≈ 985 MB/s theoretical → low/mid-range NVMe is ideal; prefer DRAM-less low-power models.
-- Exact NVMe model + price: **TBD** (Phase 4 cont / Phase 5). Many 2280s available (~€40–90). Budget row in §ref.
+- Exact NVMe model + price: **TBD** (Phase-5 BOM / Phase-7 freeze). Many 2280s available (~€40–90). Budget row in §ref.
 
 ## 4. Display (chosen: Raystar RFU800G-AYH-MNN — brightest 1125 nit, DEC-044)
 
@@ -64,15 +64,27 @@ Evidence (Toradex datasheet Rev 1.8 dated 2026-06-22, docs.toradex.com/116795; p
 | HOTHMI HTM-H080D14-LVDS-A01R | 1024×768 / 160 | 4:3 | LVDS | 1000 nit | needs LVDS driver |
 | Hardkernel Vu8S | 800×1280 / 189 | 5:8 | DSI kit | ~300–400 nit (TBD) | cheapest ($39), brightness unstated |
 
-## 5. LTE modem (cheapest, private use — DEC-026/030)
+## 5. LTE modem — tiny-LGA Cat-1 (cheapest, private use — DEC-026/058)
+
+**Leading form factor (DEC-058):** small **LGA radio module (~ESP32-WROOM footprint, ≤~30 mm)**, direct-solder on the carrier — replaces the mPCIe EC25-EUX as the leading pick. nano-SIM on the carrier.
+
+| Part | Class | Bands (EU, target) | I/F | Size | Linux | Price/avail | Conf |
+|---|---|---|---|---|---|---|---|
+| **Quectel EC200U-EU** (leading candidate) | Cat-1 | **B1/3/7/8/20** (B28 TBD) | USB2 HS (QMI/ECM → ModemManager) | LGA ≈ 29×32 (TBD) | mainline (cdc-ecm/qmi) | **TBD re-quote (DEC-058)** | Med |
+| SIMCom SIM7000-class | Cat-M1/NB-IoT (verify Cat-1 alt) | B1/3/8/20 (verify) | USB2/UART | LGA ≈ 31×31 (TBD) | generic `option`/cdc | TBD | Med |
+| Quectel BG95-class | Cat-M1/NB-IoT | B1/3/8/20 (verify) | USB2/UART | LGA ≈ 28×31 (TBD) | generic | TBD | Med |
+
+> EU bands B1/3/7/8/20 + nano-SIM required (REQ-RF-02); **exact part, bands, power, and landed price are pending re-research (DEC-058)** → Phase-5 BOM. SIM7000/BG95 are Cat-M1/NB-IoT class — verify a Cat-1 alternative (EC200U) if speed/Cat-1 is required.
+
+**Alternative (historical — superseded as leading by DEC-058):**
 
 | Part | Bands (EU) | I/F | Size | Linux | Price/avail | Conf |
 |---|---|---|---|---|---|---|
-| **Quectel EC25-EUX** ✅ | B1/3/7/8/20/28A | USB2.0 HS (QMI → ModemManager) | mPCIe 51×30×4.9 (or LGA) | **qmi_wwan mainline** | **€31.51** (mPCIe, Avnet/Unikey) | High |
+| **Quectel EC25-EUX** (alt) | B1/3/7/8/20/28A | USB2.0 HS (QMI → ModemManager) | mPCIe 51×30×4.9 | **qmi_wwan mainline** | **€31.51** (mPCIe, Avnet/Unikey) | High |
 | SIMCom SIM7600E-H | B1/3/5/7/8/20 (no 28) | USB+UART+PCM (option/PPP) | LGA 30×30×2.9 | generic `option` | **€32.76** (TME etc.) | High |
 | Quectel EG25-G | global, incl EU | QMI | LGA/mPCIe | QMI | €55–64 (disty); **EOL/harvest pressure — recheck** | Med |
 
-**EC25-EUX wins**: cheapest, most complete EU bands incl B28, best Linux story. Module RED pre-qualified; final device RED integration responsibility stays (Phase 8).
+> EC25-EUX stays the **alternative** if the tiny-LGA re-research (DEC-058) cannot find a Cat-1 part meeting B1/3/7/8/20 at target cost: cheapest historical pick, most complete EU bands incl B28, best Linux story. Module RED pre-qualified; final device RED integration responsibility stays (Phase 8).
 
 ## 6. Wi-Fi + BT (REQ-RF-01) — provided by the SoM (DEC-046)
 
@@ -85,10 +97,10 @@ Evidence (Toradex datasheet Rev 1.8 dated 2026-06-22, docs.toradex.com/116795; p
 
 | Part | Size | V | Airflow | Noise | Power | Price/avail |
 |---|---|---|---|---|---|---|
-| **Sunon HA30101V4-1000U-A99 (5 V)** ✅ | 30×30×10 axial | 5 V | 3.5 CFM | 15.1 dBA | 0.3 W | €4.63 |
-| Delta BFB0305HA-C | 30×30×10 blower | 5 V | 1.45 CFM, 0.285 inH₂O | 29 dBA | 0.65 W | €7.69–7.77 |
+| **Delta BFB0305HA-C (blower)** ✅ | 30×30×10 blower | 5 V | 1.45 CFM, **0.285 inH₂O** | 29 dBA | 0.65 W | €7.69–7.77 |
+| Sunon HA30101V4-1000U-A99 | 30×30×10 axial | 5 V | 3.5 CFM | 15.1 dBA | 0.3 W | €4.63 |
 
-Leading = **Sunon axial (quiet, low power)** pushing air across a 5–7 mm finned heatsink on the SoM, ducted to rear/side vents. Delta blower fallback if static pressure needed. Verify CFM/noise/PWM in Phase 6/8.
+**Primary = Delta BFB0305HA-C blower** (DEC-062 ducted path; `hardware/thermal.md` §2): left-back intake → fan (in-plane left of the heatsink) → heatsink fins L→R → right-side exhaust. **Sunon axial is the fallback** for a low-restriction arrangement (open fin field, where 3.5 CFM/15.1 dBA matter). ⚠ Delta -C is 2-wire, **no tach**; low-side PWM / voltage control compatibility **TBD (RISK-027)**. Verify CFM/noise/PWM in Phase 6/8.
 
 ## 8. Magnetic pogo UART connector (REQ-UART-01)
 
