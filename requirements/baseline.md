@@ -24,7 +24,7 @@ IDs are stable and used across all project assets. `Type` follows TASK.md discip
 |---|---|---|
 | REQ-AUTH-01 | Passive/legal wireless surveying only; no unauthorized access, disruption, interception, exploitation, concealment, evasion. | Hard (safety/legal, non-negotiable) |
 | REQ-ENC-01 | Closed envelope ≤ ~200 × 140 × 50 mm (≤55 with 7 mm heatsink); 3 mm top/left/right bezel + 10 mm bottom on the lid for the 8" panel. | Hard (approved change from 130×170×50) |
-| REQ-ENC-02 | Clamshell form factor (normal laptop). | Hard |
+| REQ-ENC-02 | Clamshell form factor; **three vertical boards (motherboard, daughterboard, keyboard PCB) linked by FPC/J-connectors; soM on right palm rest (keyboard PCB top ~50%); premium ThinkPad-class hinges (one-finger open, carry by screen); rainproof for hours with keyboard drainage; plastic bezel + plastic lid-top behind screen for antennas, metal edges/rims** | Hard |
 | REQ-ENC-03 | No internal speaker, microphone, or camera. | Hard |
 
 ### Compute, Memory, Storage
@@ -42,6 +42,7 @@ IDs are stable and used across all project assets. `Type` follows TASK.md discip
 |---|---|---|
 | REQ-DISP-01 | Display ~8", MIPI-DSI 800×1280 (5:8), ≥ 100 ppi (**Raystar RFU800G-AYH-MNN, 189 ppi**); 4:3 original target preserved as preference. | Preference (panel chosen) |
 | REQ-DISP-02 | Brightness ~1200 nits original target; **chosen panel = Raystar RFU800G-AYH-MNN @ 1125 nits** (brightest in list, ~daylight-visible at working PWM). | Preference (exceeds 500–800 practical) |
+| REQ-DISP-03 | **Lid-open sensor (Hall) + ambient-light sensor pointing away from the screen for automatic brightness.** | Preference |
 | REQ-KB-01 | Keyboard ≥ 5 rows (+ up to ½ row of function keys), min ~8 mm per key, US legends with ISO/German-style Enter, integrated trackball **placed between G-H-B (below space bar)**; scanned by a **low-power USB-HID deck MCU** (STM32G0-class). | Preference |
 | REQ-KB-02 | Audio out only: 3.5 mm AUX + Bluetooth (no internal speaker). | Hard (paired with REQ-ENC-03) |
 
@@ -54,14 +55,14 @@ IDs are stable and used across all project assets. `Type` follows TASK.md discip
 | REQ-IO-04 | Ethernet ≥ 100 Mbit/s (1 Gbit preferred). | Preference |
 | REQ-IO-05 | One full-size SD card slot. | Preference |
 | REQ-IO-06 | Dedicated USB-C PD power input, 65 W capability (power only). | Preference |
-| REQ-UART-01 | Magnetic pogo-pin UART (6-pin) with switchable 3.3 V / 5 V logic levels, with electrical protection and level shifting; **software-controlled bits exposed as files/symlinks: `send_power`, `logic_level`, `power_level` (0 = off / 3.3 V / safest default)**; safe default = signal + ground only until power behavior is designed and reviewed. | Hard |
+| REQ-UART-01 | Magnetic pogo-pin UART (6-pin) with switchable 3.3 V / 5 V logic levels, with electrical protection and level shifting; **software-controlled bits (files/symlinks): `send_power` (0=off), `logic_level` (0=3.3 V), `power_level` = VCCO select (0=3.3 V / 1=5 V); gated +VCCO up to 5 W @ 5 V**; safe default = signal + ground only until power behavior is designed and reviewed. | Hard |
 | REQ-UART-02 | UART serves varied targets: server terminal COM ports, microcontrollers, serial consoles (user's own cables). Pogo for ease of use/weather resistance. | Hard (usage) |
 
 ### Wireless
 | ID | Requirement | Type |
 |---|---|---|
 | REQ-RF-01 | Internal Wi-Fi + Bluetooth from the **SoM (Verdin "WB" variant, on-module Wi-Fi/BT)**, throughput ≥ 6 MB/s (~48 Mbit/s); antenna coax to an RF window in the aluminum deck. | Preference |
-| REQ-RF-02 | European LTE/5G modem with nano-SIM; Telekom-class bands typical target; **cheapest option, private use only** | Preference |
+| REQ-RF-02 | European LTE/5G modem, nano-SIM, **tiny LGA radio module (~ESP32-WROOM footprint, ≤~30 mm)**; Telekom-class bands; cheapest option, private use only. | Preference |
 
 ### Power, Battery, Runtime
 | ID | Requirement | Type |

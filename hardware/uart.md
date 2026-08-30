@@ -57,12 +57,12 @@ Physical envelope: magnetic pogo set in the **rear I/O zone** of the daughterboa
 | 5 | SPARE / NC (future: 2nd UART, RTS/CTS, or flow control) | — | NC | Reserved; **must stay unconnected in this design** |
 | 6 | **DET** / cable-presence (optional) | — | pulled-low sense | Shorts to GND in a *compliant* user cable; alt. = Hall/reed switch under magnet. Optional in v1 |
 
-> **PROPOSAL STATUS (superseded by DEC-047):** pin map is **6-pin, software-controlled** (user 2026-08-30). Controls exposed as bit-files on the SoM; 0 = default/safe:
-> - `send_power`: 0 = **off** (default), 1 = on (dedicated, fused, MCU-gated +VCCO path — SAFETY GATE)
-> - `logic_level`: 0 = **3.3 V** (default), 1 = 5 V (level-shift VCCB)
-> - `power_level`: 0 = **safest/lowest** (default; e.g., 3.3 V low-current via fused PPTC), 1 = higher (e.g., 5 V/higher current — SAFETY GATE)
-> Software path: SoM Linux (configfs/sysfs bit-files) → power-MCU over I2C → UART front-end gates (load switch + VCCO mux + current-limited regulator). File/symlink naming proposed: `/sys/kernel/cyberdeck/uart/{send_power,logic_level,power_level}` (write 0/1). See §9.3.
-> DET/presence pin retained on pin 6 (cable-present sense).
+> **PROPOSAL STATUS (DEC-047 + DEC-059, locked):** pin map is **6-pin, software-controlled**, with power semantics:
+> - `send_power`: 0 = **off** (default), 1 = on (gated +VCCO, fused, MCU-controlled — SAFETY GATE)
+> - `logic_level`: 0 = **3.3 V** (default signal level), 1 = 5 V (level-shift VCCB)
+> - `power_level` (= VCCO select): 0 = **3.3 V** (default), 1 = **5 V**; feeds the target's power input up to **5 W @ 5 V (≈1 A)** when `send_power=1`
+> Software path: SoM Linux (sysfs bit-files) → power-MCU over I2C → UART front-end gates (load switch + VCCO mux + current-limited regulator). Files proposed: `/sys/kernel/cyberdeck/uart/{send_power,logic_level,power_level}` (write 0/1). See §9.1.
+> DET/presence pin retained on pin 6.
 
 Cable guidance for user-built cables (documented in the build guide, not here):
 - Core default cable: **3-wire, TX–RX crossed, GND common**, 26–28 AWG, length ≤ ~0.5 m for ≤1 Mbit/s.
@@ -277,9 +277,9 @@ All T0x results recorded in `tests/` with date/rig; failures open a risk-registe
 
 - Exposed on the SoM as **bit-files** (configfs/sysfs or a thin driver), each accepting `0`/`1`; write-guarded (root) and symlink-friendly paths:
   - `/sys/kernel/cyberdeck/uart/send_power` — 0 = off (default), 1 = on (gated +VCCO, SAFETY GATE)
-  - `/sys/kernel/cyberdeck/uart/logic_level` — 0 = 3.3 V (default), 1 = 5 V
-  - `/sys/kernel/cyberdeck/uart/power_level` — 0 = safest/lowest (default), 1 = higher (SAFETY GATE)
-- Path: SoM kernel → I2C to power-manager MCU → load switch (send_power), VCCO mux (logic_level), current-limit regulator (power_level).
+  - `/sys/kernel/cyberdeck/uart/logic_level` — 0 = 3.3 V (default signal level), 1 = 5 V
+  - `/sys/kernel/cyberdeck/uart/power_level` — VCCO select: 0 = 3.3 V (default), 1 = 5 V; up to 5 W @ 5 V (≈1 A)
+- Path: SoM kernel → I2C to power-manager MCU → load switch (send_power), VCCO mux + current-limited regulator (power_level/logic path), level-shift VCCB (logic_level).
 - Defaults on boot: **all 0** (port inert, 3.3 V, safest). Files reflect actual state (read-back) and reject invalid writes.
 - User-facing convenience: symlinks like `/dev/cyberdeck-uart/power` are acceptable if desired; the canonical path is the sysfs below. Full spec lands in `software/` (Phase 7).
 
