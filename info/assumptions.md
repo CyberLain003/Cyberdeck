@@ -24,3 +24,6 @@
 | A-020 | Enclosure + fan: assume 25–30 mm micro blower, ~2–3 W max, on rear/side vent path | First-order planning | Medium | REQ-PWR-02 | Fan power in power budget | Phase 6/8 | Lain | Provisional |
 | A-021 | Budget may increase beyond €1,000 to facilitate the aluminum shell; €1,000 remains planning baseline | User decision 2026-08-30 | High | REQ-BUDG-01 | Chassis freedom; keep other cost discipline | Phase 5 cost model | Lain | Accepted |
 | A-022 | CNC mill locally available at no labor cost; chassis budget = material + coating (anodizing) only | User decision 2026-08-30 | High | REQ-ENC-01/02, REQ-BUDG-01 | Enables complex geometry (vents, cutouts, RF windows) cheaply | Chassis material quotes Phase 5 | Lain | Accepted |
+| A-023 | Display interface = MIPI-DSI or similar; ≥100 ppi (8" XGA → ~160 ppi) | User clarification 2026-08-30 | High | REQ-DISP-01 | DSI panel + small driver not a bridge board | Panel source Phase 4 | Lain | Accepted |
+| A-024 | Trackball located below space bar, between G-H-B | User clarification 2026-08-30 | High | REQ-KB-01 | Keyboard depth budget + ergonomics | Keyboard Phase 6 | Lain | Accepted |
+| A-025 | LTE module = cheapest option; private use only | User clarification 2026-08-30 | High | REQ-RF-02, REQ-BUDG-01 | Cheaper category; no commercial output claims | Sourcing Phase 4 | Lain | Accepted |

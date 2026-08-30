@@ -1,6 +1,6 @@
 # Sources / Evidence Register
 
-Status: **Phase 2 — no component sourcing yet.** This register is populated during Phase 4 (sourced component research) and maintained thereafter. The template below is the live format.
+Status: **Phase 4 — component sourcing started (2026-08-30).** Maintained thereafter. Template waste preserved below.
 
 ## Phase 2 entries (context/decisions)
 
@@ -13,3 +13,31 @@ Status: **Phase 2 — no component sourcing yet.** This register is populated du
 ## Placeholder for Phase 4
 
 > Cell datasheets (Molicel/Samsung), SOM vendor docs + B2B pitch info, panel datasheets, module datasheets, distributor listings w/ access dates and stale-price warnings. Format above; every price row gets a stale-price warning and access date.
+
+## Phase 4 entries
+
+| Evidence ID | Vendor/publisher | Vendor role | Region | URL | Source title | MPN/SKU | Claim supported | Quoted text or document section | Access date | Availability/lead time | Price snapshot | Confidence | Stale-price warning | Notes |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| E-004 | Molicel | Cell manufacturer | TW | molicel.com `INR21700P45B_1.2_…-80109.pdf` | INR21700-P45B Datasheet v1.2 | INR21700-P45B | Capacity 4500 mAh/16.2 Wh; 21.55×70.15 mm; 70 g; 643 Wh/L | §1 spec table | 2026-08-30 | production | — | High | N/A | Leading cell class |
+| E-005 | Molicel | Cell manufacturer | TW | molicel.com `Product-Data-Sheet-of-INR-21700-P50B-80122.pdf` | INR21700-P50B Datasheet v1.1 | INR21700-P50B | Capacity 5000 mAh/18.0 Wh; 21.55×70.15; 71 g; 714 Wh/L | §1 spec table | 2026-08-30 | production | — | High | N/A | Best ~5 Ah documented |
+| E-006 | Samsung SDI (vía mirrors) | Cell manufacturer | KR/CN | dnkpower/pdf; tokojelek v1.1 WPG | INR21700-50E Cell Spec | INR21700-50E | 4900 mAh min @3.6 V; 21.25×70.80 max; 69.5 g | spec v1.1 | 2026-08-30 | production | — | Med | N/A | Not 4910; mirror deprecated |
+| E-007 | NKON | EU retailer | NL | nkon.nl P45B / 50E / P50B pages | Cell listings | P45B/50E/P50B | prices + stock | listing pages | 2026-08-30 | In stock (P45B “mixed batch”) | P45B €4.55; 50E €3.45; P50B €6.75 | High | ⚠ Prices drift | |
+| E-008 | akkuteile.de | DE retailer | DE | category pages | Cell listings | P45B/50E/P50B | prices incl. DE VAT | 2026-08-30 | In stock | €6.50–8.90 | Med | ⚠ | |
+| E-009 | Toradex | SoM vendor | CH/DE | docs.toradex.com/116795 | Verdin i.MX 8M Plus Datasheet Rev 1.8 | Verdin 8GB (PN 0070) | 4×A53 1.6 GHz, 8 GB LPDDR4 (inline ECC); USB3 host, USB2 OTG, DSI 4-lane, HDMI2.0, dual GbE, PCIe Gen3×1, **no SATA**; DDR4-SODIMM 260-pin 0.5 mm; 69.6×35.0×6.0 | datasheet §interfaces, §connector, §dims | 2026-08-30 | — | — | High | N/A | Rev 2026-06-22 |
+| E-010 | Toradex | SoM vendor | — | developer.toradex.com/hardware/…/power-consumption/verdin-imx8mp…/ | Power consumption page | Verdin i.MX8MP | idle headless 1.44–1.7 W; idle+screen 1.7–2.5 W; STR 0.10–0.18 W; max ~5 W | power table | 2026-08-30 | — | — | High | N/A | Measured, Yocto TDX |
+| E-011 | Mouser/TrustedParts/Arrow | Distributor | US/EU | octopart + mouser + arrow | Verdin 8GB listings | 00701100/01101 | price + stock | 2026-08-30 | Mouser “26 on order”; Arrow 3 pcs | list ~$927 vs ~$293 | Med | ⚠ 3× spread | EU price bot-blocked |
+| E-012 | Raspberry Pi / BPI | SoM vendor | UK/CN | raspberrypi.com CM5; banana-pi.org BPI-RK3588 | CM5 datasheet; BPI-RK3588 docs | CM5 / BPI-RK3588 | CM5 0.4 mm BergStak, ~$67–200, mainline, 2×HDMI/DSI, no SATA; RK3588 weak mainline | datasheets | 2026-08-30 | wide/CN | per table | Med | ⚠ | Alternatives |
+| E-013 | Panelook/Youritech/Alibaba | Panel trading | CN | panelook HE080IA-01E | Innolux HE080IA-01E | HE080IA-01E | XGA 1024×768 4:3, MIPI 4-lane, ~160 ppi, bare cell | parameter page | 2026-08-30 | ~200 pcs lists | ~$20–35 (stale) | Med | ⚠ | True-4:3 DSI; no BL |
+| E-014 | Raystar | Panel vendor | CN | raystar RFU800G-AYH-MNN datasheet | — | RFU800G-AYH-MNN | 800×1280, 1125 nit, DSI 4-lane, ~189 ppi, 5:8 | datasheet | 2026-08-30 | quote-only | ~$35–60 (stale) | High/Med | ⚠ | |
+| E-015 | HOTHMI (display-lcd.com) | Panel vendor | CN | HTM-H080D14-LVDS-A01R datasheet | — | HTM-H080D14-LVDS-A01R | XGA 1024×768 4:3, 1000 nit, LVDS, ~160 ppi | datasheet | 2026-08-30 | quote-only | ~$45–70 (stale) | High/Med | ⚠ | |
+| E-016 | Hardkernel | Retail | KR | official store | Vu8S | Vu8S | 800×1280 DSI kit, $39 in stock | product page | 2026-08-30 | in stock | $39.00 | High | ⚠ | brightness unstated |
+| E-017 | lcddisplay.co | Driver board | CN | YD691MIPI-V1 datasheet | HDMI→DSI board | YD691MIPI-V1 | XGA/SVGA→DSI 2/4-lane | datasheet | 2026-08-30 | quote-only | ~$25–45 (stale) | High | ⚠ | Not needed w/ Verdin DSI |
+| E-018 | Quectel / Octopart | Modem vendor/distrib | CN/EU | datasheet.octopart.com EC25EUXGA | EC25-EUX datasheet | EC25-EUX | EU Cat-4 LTE B1/3/7/8/20/28A, USB2 HS, QMI | p.4 band table | 2026-08-30 | Avnet 0 / Unikey 2 | mPCIe €31.51 | High | ⚠ | Cheapest LTE |
+| E-019 | SIMCom | Modem | CN | datasheet SIM7600E-H | SIM7600E-H | SIM7600E-H | B1/3/5/7/8/20 (no 28) | band table | 2026-08-30 | TME stock 50 | €32.76 | High | ⚠ | |
+| E-020 | Kernel DB (cateee) | Kernel repo | — | cateee RTW88_USB, RTW88_SDIO | RTW88 drivers | RTL8821CU / RTL8822CS | mainline since 6.2/6.4 | lkddb | 2026-08-30 | — | — | High | N/A | |
+| E-021 | AliExpress DE | Marketplace | CN→ES | item 1005010443239234 / 1005007384612104 | BL-M8821CU1 / dongle | RTL8821CU | price | listing | 2026-08-30 | stock | €3.79–6.85 | Med | ⚠ | ceramic unverified |
+| E-022 | Octopart (Delta) | Distributor | US | BFB0305HA-C datasheet | micro fan | BFB0305HA-C | 30×30×10 blower 0.65 W 29 dBA | datasheet | 2026-08-30 | prod | €7.69–7.77 | High | ⚠ | |
+| E-023 | Octopart (Sunon) | Distributor | US | HA30101V4-1000U-A99 | micro fan | HA30101V4-1000U-A99 | 30×30×10 axial 3.5 CFM 15.1 dBA 0.3 W | listing | 2026-08-30 | listed | €4.63 | Med | ⚠ | leading fan |
+| E-024 | AliExpress | Marketplace | ES | item 1005005122336187 | magnetic pogo set | 4–6 pin | seller-stated 2 A, 2.54 pitch | listing | 2026-08-30 | 375 sold | €3.77/set | Low | ⚠ | verify before design-in |
+| E-025 | Octopart (ST) | Distributor | US | STUSB4500QTR datasheet | PD sink | STUSB4500 | PD3.0 sink, fixed PDOs to 20 V, POWER_OK, no MCU | datasheet | 2026-08-30 | prod | €0.99 | High | ⚠ | leading PD sink |
+| E-026 | AliExpress | Marketplace | ES | item 1005006588379741 | ADNS-9800 sensor | ADNS-9800 | laser trackball sensor, SPI | listing + known datasheet | 2026-08-30 | 700+ sold | €1.25 | Med | ⚠ | small-ball caveat |

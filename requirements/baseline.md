@@ -40,9 +40,9 @@ IDs are stable and used across all project assets. `Type` follows TASK.md discip
 ### Display & Human Interface
 | ID | Requirement | Type |
 |---|---|---|
-| REQ-DISP-01 | Display ~8", 4:3, ≥ 720p at 30 Hz. | Preference |
+| REQ-DISP-01 | Display ~8", 4:3, ≥ 720p at 30 Hz; **interface = MIPI-DSI or similar; ≥ 100 ppi | Preference |
 | REQ-DISP-02 | Brightness ~1200 nits target; practically, daylight-visible panel preferred (≥ ~500–800 nits realistic for an 8" 4:3 panel). | Preference (user relaxed 1200 nits) |
-| REQ-KB-01 | Keyboard ≥ 5 rows (+ up to ½ row of function keys), min ~8 mm per key, US legends with ISO/German-style Enter, integrated trackball. | Preference |
+| REQ-KB-01 | Keyboard ≥ 5 rows (+ up to ½ row of function keys), min ~8 mm per key, US legends with ISO/German-style Enter, integrated trackball **placed between G-H-B (below space bar)**. | Preference |
 | REQ-KB-02 | Audio out only: 3.5 mm AUX + Bluetooth (no internal speaker). | Hard (paired with REQ-ENC-03) |
 
 ### I/O
@@ -61,7 +61,7 @@ IDs are stable and used across all project assets. `Type` follows TASK.md discip
 | ID | Requirement | Type |
 |---|---|---|
 | REQ-RF-01 | Internal Wi-Fi + Bluetooth, throughput ≥ 6 MB/s (~48 Mbit/s), PCB/ceramic antenna. | Preference |
-| REQ-RF-02 | European LTE/5G modem with nano-SIM; Telekom-class bands typical target. USB/mPCIe-class module. | Preference |
+| REQ-RF-02 | European LTE/5G modem with nano-SIM; Telekom-class bands typical target; **cheapest option, private use only** | Preference |
 
 ### Power, Battery, Runtime
 | ID | Requirement | Type |

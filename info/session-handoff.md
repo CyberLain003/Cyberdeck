@@ -3,9 +3,9 @@
 Updated: 2026-08-30. Purpose: allow any future session to resume with full context.
 
 ## Current status
-- **Phase 2 (Feasibility) approved and completed.** Repo (branch `master`) at hash with baseline, compliance matrix, feasibility, decisions, risks, info assets.
-- **Go-ahead received** from user for Phase 2 after Phase-1 Q&A (12 questions answered).
-- Next gate: **Phase 3 — Architecture and options** (SOM family, display path, power/hot-swap topology, keyboard, chassis). Await user approval to begin Phase 3.
+- **Phase 2 (Feasibility) complete; Phase 3 (Architecture) complete; Phase 4 (Sourced component research) in progress — first evidence pull done (2026-08-30).**
+- Repo `master` — Phase 4 candidates/alternatives/vendors/sources written, not yet committed.
+- Next gate: **Phase 5 BOM & cost** after Phase-4 continuation (SSD/bridge, panel+backlight, Verdin quoted price, SSD model).
 
 ## Key decisions so far (see decisions/decision-log.md)
 1. Envelope 13×17×5 cm (height 4→5 cm, user approved).
@@ -28,11 +28,16 @@ Updated: 2026-08-30. Purpose: allow any future session to resume with full conte
 - Concept feasible in principle; binder = runtime (4 W avg class) + sealed-thermal (6–8 W passive) + budget (€700–1,100, contingency 15%).
 - Hard blockers for later phases: low-idle ARM SOM; display ≤ ~2.5 W @ working brightness, ≥500 nit 8" 4:3; SATA-capable SOM (or bridge); hot-swap pre-charge + safety review.
 
-## Immediate next actions (Phase 3)
-1. Compare SOM families (i.MX8MP-class vs PCIe-based) on: idle power, native SATA/HDMI/USB3/OTG, B2B pitch routable at 6L, mainline/NixOS support.
-2. Confirm display interface (native HDMI vs DSI) to narrow panels.
-3. Sketch power topology (4S power-bridge, charge path) and hot-swap inrush plan (high level).
-4. Present architecture matrix for approval.
+## Immediate next actions (Phase 4 continuation → Phase 5)
+1. Phase-4 continue: quote JMB582/JMS582 SATA bridge (+M.2 SATA SSD model), panel/backlight decision (RISK-018), Verdin 8GB EU quote (RISK-017), charger IC (BQ25713) part.
+2. Then Phase 5: full BOM + landed-Germany cost model.
+3. Then gate to Phase 6 (electrical/mechanical).
+
+## Key evidence just gathered (Phase 4, 2026-08-30, all in info/sources.md)
+- Cells sourced: P45B/50E/P50B datasheets + EU prices (E-004..008).
+- Verdin i.MX 8M Plus confirmed: 0.5 mm SODIMM B2B, idle 1.44–1.7 W, native DSI/HDMI/USB3/OTG/dual-GbE/PCIe-Gen3; **no SATA** (E-009..011).
+- Display: HE080IA-01E (4:3 DSI, 160 ppi, no BL), HOTHMI LVDS 1000-nit, Vu8S/Raystar DSI 5:8 (E-013..017).
+- LTE: EC25-EUX €31.51 EU bands incl B28 (E-018); Wi-Fi RTL8821CU mainline (E-020/021); fan Sunon/Delta (E-022/023); pogo (E-024); PD sink STUSB4500 (E-025); trackball ADNS-9800 (E-026), small-ball caveat.
 
 ## Open questions to resolve early
 - OQ-001 SOM family; OQ-008 display interface; OQ-007 LTE mandatory vs optional; OQ-005 keyboard/trackball details; OQ-004 pack topology (4S vs 2S).
