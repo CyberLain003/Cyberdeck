@@ -1,0 +1,36 @@
+# Bill of Materials (Phase 5)
+
+Status: **Draft for approval** — 2026-08-30. Per strict evidence rule: prices are **snapshots** (stale within weeks), all sourced + dated in `info/sources.md` (E-xxx). Lines with `TBD` price are quoted-part or pending decision. "Leading" = chosen direction; not an order.
+
+FX: 1 USD ≈ 0.92 EUR. VAT DE 19%. Electronics into DE ≈ 0% duty (HS 8471/8542), shipping per channel; see `landed-cost-germany.md` for the full model and assumptions.
+
+## BOM table (per TASK.md template)
+
+| BOM ID | Category | Manufacturer | MPN/SKU | Description | Qty | Unit price | Currency/FX | Shipping | VAT | Customs rate | Duty | Brokerage | Landed EUR (each) | Vendor/source | Access date | Availability/region | Evidence conf. | Requirement IDs | Status/notes |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| B-001 | Compute | Toradex | 00701100 | Verdin i.MX 8M Plus Quad 8GB WB IT (32GB eMMC) | 1 | €410.87 | EUR net | incl. quote | 19% | 0% HS8471 | €0 | est. €0 (disty) | **€489** | Mouser/Farnell (Octopart E-011) | 2026-08-30 | order 0/2 pcs, ~19h | High | REQ-COMP-01/02/05/06 | **price volatile; 4GB alt €294 (B-001b)** |
+| B-001b | Compute (alt) | Toradex | 00631102 | Verdin i.MX 8M Plus Quad 4GB (32GB eMMC) | 1 | €293.96 | EUR net | — | 19% | 0% | €0 | — | **€350** | Octopart | 2026-08-30 | stock | High | REQ-COMP-02 (4GB) | 25% cheaper if 4GB suffices |
+| B-002 | Storage | Kingston | SNV3S/500G | NV3 500GB NVMe PCIe 4.0 x4 (runs on Gen3 x1, DRAM-less) | 1 | €102.90 | EUR incl. VAT | ~€5 | incl. | 0% | €0 | €0 | **~105–110** | Alza.de | 2026-08-30 | in stock >5 | High | REQ-COMP-03 | Gen4 runs fine on Gen3x1 |
+| B-003 | Storage (alt) | KingSpec | NE 2280 256GB | NVMe 256GB DRAM-less (Gen3 x4) | 1 | €45.49 | EUR incl. | ~€2 | incl. | 0% | €0 | €0 | **~46–49** | Amazon.de | 2026-08-30 | in stock | Med | REQ-COMP-03 | cheaper, Chinese-genre brand |
+| B-004 | Display | Hardkernel | Vu8S | 8" MIPI-DSI 800×1280 kit (incl. backlight) | 1 | $39.00 | USD | $10–15 DHL | 19% import | 0% HS8528 | €0 | ~€6 | **≈59–65** | hardkernel.com (KR) | 2026-08-30 | in stock | High | REQ-DISP-01/02 | 5:8 ratio; brightness TBD; needs DSI FPC adapter |
+| B-005 | Compute carrier | PCBWay | custom | 4–6L carrier PCB (incl. M-key socket, B2B, I/O) | 1 | ~€40 | EUR (CN) | PCBWay ship ~€20 | 19% | 0% | €0 | €0 | **~60–70** | PCBWay | TBD | — | Med | REQ-COMP-06 | assembly + parts separately (B-006); qty proto |
+| B-006 | Assembly | PCBWay (SMT) | — | Stencil+turnkey assembly carrier (conventional parts) | 1 | ~€40–90 | EUR | incl. | — | — | — | — | **~40–90** | PCBWay | TBD | — | Med | REQ-COMP-06 | price per features; qty proto |
+| B-007 | Cells | Molicel | INR21700-P50B | 21700 Li-ion 5000mAh (18.0Wh) — pack build (8×) | 8 | €6.75 | EUR incl. | NKON ship ~€7 | incl. | 0% | €0 | €0 | **~7.6** | NKON | 2026-08-30 | in stock | High | REQ-PWR-01 | P50B default (runtime margin) |
+| B-008 | BMS/pack | — | custom | 2× 4S1P BMS PCBs + contacts + connectors + wiring | 2 | ~€30 | EUR | — | 19% | 0% | — | — | **~35** | custom/LS | TBD | — | Low | REQ-PWR-01/03/04/05 | safety-critical; professional review gate |
+| B-009 | Charger IC | TI | BQ25713RSNR | 4S buck-boost charger 24V-in (for 65W PD) | 1 | €3.30 | EUR net | small | 19% | 0% | €0 | €0 | **~3.9–4.1** | Mouser/DigiKey | 2026-08-30 | stock 432/2,718 | High | REQ-PWR-04, REQ-IO-06 | WQFN-32 0.5mm — routable |
+| B-010 | PD sink | ST | STUSB4500QTR | PD3.0 sink controller (fixed PDOs→20V) | 1 | €0.99 | EUR net | small | 19% | 0% | €0 | €0 | **~1.2** | Arrow/Farnell | 2026-08-30 | production | High | REQ-IO-06 | no MCU; POWER_OK |
+| B-011 | LTE modem | Quectel | EC25-EUX | Cat-4 LTE EU (B1/3/7/8/20/28A) mPCIe | 1 | €31.51 | EUR net | ship | 19% | 0% | €0 | €0 | **~37** | Avnet/Unikey | 2026-08-30 | stock 0/2 | High | REQ-RF-02 | private-use; nano-SIM slot on carrier |
+| B-012 | Wi-Fi/BT | Realtek (module) | RTL8821CU pad (BL-M8821CU1) | 802.11ac 1×1 USB + BT5 module | 1 | €6.85 | EUR+ship (Ali) | ~€2 | collect | 0% | €0 | €0 | **~9** | AliExpress DE | 2026-08-30 | in stock | Med | REQ-RF-01 | ceramic variant unverified; u.FL→window antenna |
+| B-013 | Fan | Sunon | HA30101V4-1000U-A99 | 30×30×10 axial 5V 0.3W | 1 | €4.63 | EUR net | small | 19% | 0% | €0 | €0 | **~5.5** | (Octopart/Sunon) | 2026-08-30 | listed | Med | (thermal) | quiet 15 dBA |
+| B-014 | Heatsink | — | custom milled | 5–7mm finned block (Al) on SoM | 1 | ~€5 | EUR | — | — | — | — | — | **~5** | local CNC | TBD | — | Med | (thermal) | free CNC, material only |
+| B-015 | Keyboard/membrane | custom | — | 6-row membrane w/ US labels + ISO-DE Enter | 1 | ~€30–60 | EUR | — | 19% | 0% | — | — | **~30–60** | custom | TBD | — | Low | REQ-KB-01 | tooling/cost to quote; trackball on deck |
+| B-016 | Trackball sensor | Avago/Pixart | ADNS-9800 | laser trackball sensor (SPI) | 1 | €1.25 | EUR+ship | ~€2 | collect | 0% | €0 | €0 | **~3** | AliExpress | 2026-08-30 | 700+ sold | Med | REQ-KB-01 | small-ball caveat (RISK-020) |
+| B-017 | UART pogo | — | magnetic 4–6pin | magnetic pogo connector set | 1 | €3.77 | EUR+ship | ~€2 | collect | 0% | €0 | €0 | **~6** | AliExpress | 2026-08-30 | 375 sold | Low | REQ-UART-01 | verify mech/datasheet before build; brand opt. |
+| B-018 | UART front-end parts | — | level-shift + ESD + polyfuse | for pogo protection 3.3/5V | ~1 | ~€5 | EUR | — | 19% | 0% | — | — | **~5** | disty | TBD | — | Med | REQ-UART-01 | design Phase 6 |
+| B-019 | USB-C receptacle + misc | — | USB-C PD sink connector, power path, fuses | carrier PCBA parts | 1 | ~€15–25 | EUR | — | 19% | 0% | — | — | **~18–30** | disty | TBD | — | Med | REQ-IO-06 | incl. E-marked 5A C-C cable option |
+| B-020 | Chassis material | — | 6061-T6 | AL stock for base+lid (170×130×46) | ~1 kg | ~€15–25/kg | EUR | — | — | — | — | — | **~25–50** | local metal shop | 2026-08-30 | local stocks vary | Med | REQ-ENC-01/02 | free CNC labor; + consumables ~€20–40 |
+| B-021 | Anodizing | local eloxal shop | black matte | black matte anodize chassis | 1 | ~€100–180 | EUR | — | — | — | — | — | **~100–180** | local | TBD | — | Med | REQ-ENC-02 | black dye surcharge; get 2–3 quotes |
+| B-022 | Hinges | AliExpress/stock | torque hinge pair | 2 friction-torque hinges (~30–40mm) | 2 | €3.39 | EUR+ship | ~€2 | collect | 0% | €0 | €0 | **~4–10** | AliExpress | 2026-08-30 | 418 sold | Med | REQ-ENC-02 | or machined knuckle + M2 shaft |
+| B-023 | SIM slot + antennas | SIMCom/Quectel, econ | nano-SIM slot + LTE antenna + WiFi/BT antenna | antennas + SIM holder | 1 | ~€8–15 | EUR | — | 19% | 0% | — | — | **~10–18** | disty/Ali | TBD | — | Med | REQ-RF-01/02 | RF windows in chassis (RISK-013) |
+| B-024 | Misc (audio, SD slot, ETH PHY, USB-C, buttons, screws/cables) | — | — | codecs/PHY/SD slot/etc | 1 | ~€25–45 | EUR | — | 19% | 0% | — | — | **~30–55** | disty | TBD | — | Med | REQ-KB-02, REQ-IO-x | PHY RTL8211 or USB→GbE |
+| B-025 | Test/burn-in | — | — | eval boards (Verdin eval kit, panel), test bench material | 1 | ~€120–200 | EUR | — | incl | — | — | — | **~120–200** | — | — | — | Med | all | engineering-validation samples first (Phase 9) |
