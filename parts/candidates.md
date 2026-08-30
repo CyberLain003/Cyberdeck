@@ -42,26 +42,28 @@ Evidence (Toradex datasheet Rev 1.8 dated 2026-06-22, docs.toradex.com/116795; p
 | RPi CM5 | Cheap (~$67–200), fully mainline, 2×HDMI+2×DSI+GbE+USB3 | **0.4 mm B2B ≈ near-BGA routing** (fails user constraint); no SATA; idle ~2 W | Conditional (routing risk high) |
 | RK3588 SoM (BPI-RK3588) | most perf/€, 2×GbE | weak mainline (NPU/VPU/panfrost partial); no EU franchised distro; idle TBD | Conditional (runtime/mainline risk) |
 
-## 3. SSD path (M.2 2280 SATA — REQ-COMP-03)
+## 3. Storage (M.2 2280 NVMe — REQ-COMP-03, user-approved change from SATA)
 
-- Verdin lacks SATA ⇒ **PCIe Gen3 ×1 → SATA bridge** on carrier. **JMB582 / JMS582-class** (ASMedia/JMicron) — TQFP, user-routable. **Part + price not yet quoted (TBD, Phase 4 cont.)**.
-- M.2 2280 SATA SSD: not sourced this pass (many options ~€55–90; see Phase 5).
-- Note: i.MX8M **Plus SoC has native SATA** but Verdin does not route it; other i.MX8MP SoMs (see alternatives) may expose SATA — to research.
+- **Verdin has no SATA ⇒ M.2 2280 NVMe on PCIe Gen3 ×1**, direct (no bridge chip — DEC-027 superseded by DEC-033).
+- **Keying/silkscreen blocking (user requirement):** socket **M-key only**, silkscreen stating "NVMe M.2 2280 ONLY", physical keying prevents a B/B+M SATA drive from being inserted. Only the correct drive fits.
+- PCIe Gen3 ×1 ≈ 985 MB/s theoretical → low/mid-range NVMe is ideal; prefer DRAM-less low-power models.
+- Exact NVMe model + price: **TBD** (Phase 4 cont / Phase 5). Many 2280s available (~€40–90). Budget row in §ref.
 
-## 4. Display (8" 4:3-class; ≥100 ppi; MIPI-DSI accepted — DEC-024)
+## 4. Display (chosen: cheapest — DEC-035 / A-028)
 
-| Panel | Res / ppi | Ratio | I/F | Brightness | Backlight power | OD×thick | Price/avail | Conf |
-|---|---|---|---|---|---|---|---|---|
-| **HE080IA-01E** (Innolux/HannStar) | 1024×768 / **160 ppi** | **4:3** | **MIPI 4-lane** | bare cell (0 cd/m²) — **backlight not included** | **TBD** (matched BLU est ~3–4.5 W @ ≥500 nit — **unverified**) | 171.1×132.6×1.07 mm | Panelook/Youritech/Alibaba, ~$20–35 (stale, quote-only) | Secondary (specs consistent across 2+ mirrors) |
-| **Raystar RFU800G-AYH-MNN** | 800×1280 / 189 ppi | 5:8 port | MIPI 4-lane | **1125 nits** | ~4.32 W max / ~2.2 W @50% PWM | 115.7×184.9×4.75 | quote-only (~$35–60 stale) | Primary |
-| **HOTHMI HTM-H080D14-LVDS-A01R** | 1024×768 / 160 ppi | 4:3 | **LVDS** | **1000 nits** | ~3 W (implied) | 183×~7.1 (w/ RTP) | quote-only (~$45–70 stale) | Primary |
-| **Hardkernel Vu8S** | 800×1280 / 189 ppi | 5:8 port | DSI kit | not published (~300–400 nit class) | TBD (5 V PWM) | 202×153 w/ bracket | **$39 in stock** | Primary (brightness TBD) |
-| Waveshare 8" DSI (C) | 1280×800 / 189 ppi | 16:10 | DSI | not published | TBD | board-mount | $74.99 official | Primary (brightness TBD) |
+### Leading: Hardkernel Vu8S (8" 800×1280 DSI kit) — $39 official, in stock
+- 4-lane MIPI-DSI (native to Verdin), 189 ppi, 5:8 portrait (NOT 4:3 — accepted per "cheaper").
+- Backlight + driver included; touch optional. Brightness **unstated (~300–400 nit class; TBD — bench to confirm)** vs daylight-visible target.
+- Powershare note: backlight power TBD; measure at working brightness for 30 h budget.
 
-- **HDMI→DSI bridge board** (if SoM HDMI-only, not needed for Verdin which has native DSI): **YD691MIPI-V1** (RGB/XGA/SVGA→DSI 2/4-lane; quote-only ~$25–45); chip-level Lontium LT8918. Not required for leading compute.
-- **Runtime-critical:** panel backlight is the dominant power term (~2.5 W allowance). True-4:3 DSI (HE080IA-01E) needs a matched backlight (power TBD) → **display choice is the open decision under gate**.
+### Upgrade alternatives (if brightness or 4:3 matters more than price)
+| Panel | Res/ppi | Ratio | I/F | Brightness | Price | Notes |
+|---|---|---|---|---|---|---|
+| **HE080IA-01E** | 1024×768 / 160 | **4:3** | DSI 4-lane | bare cell — needs backlight | ~$20–35 (stale) | true 4:3; BL power TBD |
+| HOTHMI HTM-H080D14-LVDS-A01R | 1024×768 / 160 | 4:3 | LVDS | 1000 nit | ~$45–70 (stale) | needs LVDS driver (Verdin has DSI/HDMI) |
+| Raystar RFU800G-AYH-MNN | 800×1280 / 189 | 5:8 | DSI | 1125 nit | ~$35–60 (stale) | brightest DSI |
 
-## 5. LTE modem (cheapest, private use — DEC-026)
+## 5. LTE modem (cheapest, private use — DEC-026/030)
 
 | Part | Bands (EU) | I/F | Size | Linux | Price/avail | Conf |
 |---|---|---|---|---|---|---|

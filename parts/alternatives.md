@@ -10,19 +10,19 @@ Status: 2026-08-30. To be re-warmed if lead leading option fails in Phase 4/5 re
 | **Rockchip RK3588 SoM** | Only if runtime target is relaxed (idle 3–5 W) and mainline acceptable | higher idle; weak NPU/VPU mainline; no EU distro |
 | NXP official i.MX8MP Evo-whatever / eval — not portable | — | eval boards not B2B to custom carrier |
 
-## SSD (REQ-COMP-03)
+## SSD (REQ-COMP-03 — resolved to NVMe)
 | Alt | When | Gap |
 |---|---|---|
-| PCIe→SATA via **JMicron JMS582 / ASMedia ASM1062** (TQFP) | Default (leading) | adds one chip + routing; cheap (~€5–10) |
-| **NVMe M.2** (drop SATA requirement, user-approved malleability) | If SATA unavailable/bridge fails | changes REQ-COMP-03 wording (Preference — allowed w/ approval) |
+| **NVMe M.2 2280 (M-key, PCIe Gen3 ×1)** — leading (DEC-033) | Default | none — drops bridge chip entirely |
+| M.2 SATA B+M-key (original REQ-COMP-03 wording) | Only if driver/NVMe issues | would reintroduce PCIe→SATA bridge; conflicts with keying-block choice — superseded |
 
 ## Display
 | Alt | When | Gap |
 |---|---|---|
-| **HE080IA-01E + separate backlight** (true 4:3 DSI) | Prefer 4:3 + DSI; backlight power TBD | backlight sourcing + power unknown (~3–4.5 W est) |
+| **Vu8S (5:8, $39, official)** — leading (DEC-035) | Default (cheapest) | 5:8 not 4:3; brightness TBD |
+| **HE080IA-01E + separate backlight** (true 4:3 DSI) | If 4:3 required | backlight sourcing + power unknown |
 | **HOTHMI 1000-nit LVDS** | Buy brightness at 4:3; accept LVDS + LVDS driver | extra driver board; ~3 W BL |
-| **Raystar 1125-nit DSI (5:8 portrait)** | Brightness + DSI + brightness > daily | _not 4:3_ — violates ratio preference |
-| **Vu8S / Waveshare 8" DSI (off-the-shelf kit)** | Lowest risk of getting a working panel fast; official $39 | not 4:3; brightness unstated |
+| **Raystar 1125-nit DSI (5:8 portrait)** | brightness + DSI when ratio not prioritized | _not 4:3_ — violates ratio preference |
 
 → Display decision is an open gate (runtime power is the lead constraint).
 
@@ -51,9 +51,9 @@ Status: 2026-08-30. To be re-warmed if lead leading option fails in Phase 4/5 re
 | Delta BFB0305HA-C blower | if static pressure needed against heatsink | louder (29 dBA), 0.65 W |
 
 ## Marked TBD / to resolve in Phase 4 continuation
-- JMicron/ASMedia SATA-bridge exact part, price, footprint.
-- M.2 2280 SATA SSD exact model + price.
-- Backlight unit/power for HE080IA-01E.
+- NVMe M.2 2280 exact model + price (low-power, DRAM-less preferred).
+- Vu8S measured brightness + backlight power (RISK-018).
+- Verdin 8GB EU/US price + lead time (RISK-017) — CN/US import ok (DEC-036).
+- Charger IC (BQ25713) exact part + price.
 - Trackball ball-size test (ADNS small-ball viability).
 - Pogo connector mechanical proof or branded equivalent.
-- Verdin 8GB EU price + lead time (authoritative quote).

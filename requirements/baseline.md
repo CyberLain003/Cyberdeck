@@ -32,7 +32,7 @@ IDs are stable and used across all project assets. `Type` follows TASK.md discip
 |---|---|---|
 | REQ-COMP-01 | CPU ≥ 2 cores, ≥ 1 GHz. | Preference |
 | REQ-COMP-02 | Memory 4–8 GB DDR4 or better; 8 GB preferred, 4 GB acceptable. | Preference |
-| REQ-COMP-03 | One M.2 **2280 SATA** SSD (B-key or B+M-key; not NVMe M-key). | Preference |
+| REQ-COMP-03 | One M.2 2280 **NVMe** SSD (M-key; **user-approved change** from SATA). Socket keyed **M-only** + silkscreen so only the matching NVMe 2280 physically fits ("hardware blocking", user 2026-08-30). | Preference (changed) |
 | REQ-COMP-04 | Linux compatibility: all firmware/drivers upstream or in `linux-firmware`; no proprietary out-of-tree drivers. | Hard |
 | REQ-COMP-05 | NixOS fully supported (defined = OS runs reproducibly; kernel, firmware, Wi-Fi/BT, modem, audio, suspend/resume work with a test strategy). | Hard |
 | REQ-COMP-06 | Compute = custom carrier PCB (4–6 layer, PCBWay-practical) hosting an off-the-shelf SOM/computer-on-module via B2B connector. | Hard (user architectural decision) |
@@ -75,7 +75,7 @@ IDs are stable and used across all project assets. `Type` follows TASK.md discip
 ### Budget
 | ID | Requirement | Type |
 |---|---|---|
-| REQ-BUDG-01 | Total landed budget ≤ EUR 1,000 delivered-to-Germany (VAT, shipping, duty, fees, contingency included) as **planning baseline; budget may increase to facilitate the aluminum chassis** (user approval 2026-08-30). Chassis CNC labor locally free — cost = material + coating only. | Preference (strong target, flex approved) |
+| REQ-BUDG-01 | Total landed budget ≤ EUR 1,000 delivered-to-Germany (VAT, shipping, duty, fees, contingency included) as **planning baseline; may increase to facilitate the aluminum chassis** (approved). **Imports from CN/US allowed; shipping/VAT/duty must be priced in.** Chassis CNC local at no labor cost. | Preference (strong target, flex approved) |
 
 ## Workload Definition (REQ-PWR-02 detail)
 
