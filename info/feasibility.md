@@ -102,20 +102,20 @@ Per-pack and total charging currents are within 4S1P BMS practice; PD sink contr
 
 ---
 
-## 6. Thermal (sealed clamshell, passive first, optional micro-fan)
+## 6. Thermal (active: micro fan + 5–7 mm heatsink on SOM; aluminum chassis)
 
-- Surface area ≈ **0.074 m²** (box model).
-- Passive natural convection + radiation, plastic case: realistic dissipation **5–10 W** at ΔT ≈ 15–20 °C (skin ≤ ~45–50 °C at 25 °C ambient).
-- **Passive continuous budget ≈ 6–8 W** in a sealed enclosure.
+- **User constraints (DEC-017/016/018):** micro fan + 5–7 mm heatsink over the SoM; black matte anodized aluminum chassis (structure-as-heatsink); ventilation via rear/side vents. Local CNC is free ⇒ apertures/cutouts are cheap (material + coating only).
+- Surface area ≈ **0.074 m²** (box model). Matte-anodized aluminum adds conduction/spread + emissivity (~0.85–0.9).
+- **Active continuous dissipation budget ≈ 10–14 W** (vs 6–8 W sealed/passive). Fan ~0.25–0.5 W continuous, PWM by power-manager MCU.
 
-| State | Internal dissipation | vs. passive budget |
+| State | Internal dissipation | vs. active budget |
 |---|---|---|
 | Terminal/idle | ~3.8 W | ✅ comfortable |
-| Browsing | ~6.6 W | ✅ near limit long-term |
-| Radio-active | ~8.7 W | ⚠️ above budget — vents / heat path needed |
-| Charging + use | ~11–16 W | ❌ sustained — needs lid-open, vents, or mini-fan |
+| Browsing | ~6.6 W | ✅ comfortable |
+| Radio-active | ~8.7 W | ✅ within |
+| Charging + use (65 W) | ~11–16 W | ⚠️ at/over ceiling — fan full + charge taper (RISK-016) |
 
-**Finding:** charging-while-using at full 65 W in a sealed case will overheat a plastic shell. Need heat conduction to the frame/hinge + vent slits, or reduce charge current while running hot. Plan for it in Phase 6; not a feasibility blocker if addressed.
+**Finding:** active cooling + aluminum chassis largely resolves the previous sealed-thermal blocker; charge-while-use still needs fan-at-max + charge taper on temperature. Verify CFM/noise/power of the 25–30 mm fan in Phase 6/8.
 
 ---
 
@@ -126,15 +126,16 @@ Per-pack and total charging currents are within 4S1P BMS practice; PD sink contr
 | Battery cells (8×70 g) | 560 g |
 | BMS/connectors/wiring (2 packs) | 60 g |
 | Mainboard + SOM | 150–200 g |
+| Heatsink (5–7 mm) + micro fan | 40–70 g |
 | Display (8" panel + glass) | 150–170 g |
 | Keyboard + trackball | 120–140 g |
 | M.2 SATA SSD | 50–70 g |
 | LTE modem + antennas | 30–40 g |
-| Chassis (Al ~0.8 mm) | 350–500 g |
+| Chassis (Al, CNC, base+lid+deck) | 400–550 g |
 | Screws, cables, PD/charge HW | 100–130 g |
-| **Total** | **≈ 1.5–1.75 kg** |
+| **Total** | **≈ 1.6–1.9 kg** |
 
-CoM estimate: packs occupy rear ~60% of base → base is rear-heavy; expect CoM ≈ 55–65% of base depth from front, near/near the hinge — beneficial (no tip-back risk). Fine-tuning w/ hinge position is Phase 6.
+CoM note (front battery insertion, DEC-018): packs sit in the **front** of the base, so the base is now relatively **front-loaded**; the rear I/O/power daughterboard offsets it. Expect CoM ≈ **45–55% of base depth** from front — neutral-to-slightly-forward, acceptable for laptops with a rear hinge. Verify with CAD in Phase 6; no tip-back risk either way.
 
 ---
 
@@ -174,13 +175,14 @@ Ranges are planning envelopes; **no quotes yet (Phase 4/5)**. FX assumption 1 EU
 | Wi-Fi/BT module + antennas | 15–35 |
 | LTE modem + antennas | 60–120 |
 | UART pogo + protection | 15–30 |
-| Chassis + hinges | 80–200 |
+| Heatsink (5–7 mm) + micro fan | 20–40 |
+| Chassis **material + coating only** (CNC labor free, DEC-023) + purchased hinges | 60–150 |
 | Misc (SD slot, HDMI/LAN/USB, screws, cables, test) | 50–100 |
-| **Subtotal** | **≈ 625–1,045** |
-| **Contingency 15%** | **~95–155** |
-| **Total landed (incl. VAT, ship, conting.)** | **≈ 700–1,100** |
+| **Subtotal** | **≈ 660–1,045** |
+| **Contingency 15%** | **~100–155** |
+| **Total landed (incl. VAT, ship, conting.)** | **≈ 735–1,150** |
 
-**Finding:** target **€1,000 is genuinely tight but plausible** if: SOM mid-range, plastic/low-cost chassis, PCB assembled in low volume, and LTE treated as a phase-costed option. It becomes **unlikely** with: CNC aluminum chassis, expensive SOM, and mandatory LTE simultaneously. Trade space documented; no change to budget requirement without approval.
+**Finding:** €1,000 remains a strong baseline and is **feasible** because the aluminium chassis is no longer a labor-cost driver (CNC free — only material/coating/hinges). Budget flexibility is approved for the shell (DEC-022). Remaining drivers: SOM, LTE, keyboard, panels. No change to the €1,000 baseline without approval, but headroom exists.
 
 ---
 
@@ -194,9 +196,9 @@ Ranges are planning envelopes; **no quotes yet (Phase 4/5)**. FX assumption 1 EU
 
 ### Trade space (no requirements changed, offered for approval)
 - Runtime vs. display/power vs. cell capacity (P45B / 50E / P50B).
-- Chassis material: aluminium (weight/stiffness, cost) vs. printed/plastic (cheap, lighter thermal).
+- ~~Chassis material: aluminium vs printed/plastic~~ → **resolved: black matte anodized aluminum, CNC free locally (DEC-016/023)**.
 - LTE as a later add-on to protect budget.
 - Mechanical keyboard vs. membrane/low-cost keys.
 
 ### Provisional verdict
-The concept is **feasible in principle**, the binder being battery+runtime+thermal, all of which resolve to **display power and SoC idle power**. Budget needs discipline but has real trade room. Next: **Phase 3 — Architecture and options** (SOM families, display path, power topology, hot-swap approach, keyboard/Trackball options, chassis strategy).
+The concept is **feasible in principle**, the binder being battery+runtime+thermal, all of which resolve to **display power and SoC idle power**. Budget has flexibility for the aluminum shell (CNC free). Next: **Phase 3 — Architecture and options** (SOM families, display path, power topology, hot-swap approach, keyboard/trackball options, chassis strategy).

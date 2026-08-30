@@ -75,7 +75,7 @@ IDs are stable and used across all project assets. `Type` follows TASK.md discip
 ### Budget
 | ID | Requirement | Type |
 |---|---|---|
-| REQ-BUDG-01 | Total landed budget ≤ EUR 1,000 delivered-to-Germany (VAT, shipping, duty, fees, contingency included). | Preference (strong target) |
+| REQ-BUDG-01 | Total landed budget ≤ EUR 1,000 delivered-to-Germany (VAT, shipping, duty, fees, contingency included) as **planning baseline; budget may increase to facilitate the aluminum chassis** (user approval 2026-08-30). Chassis CNC labor locally free — cost = material + coating only. | Preference (strong target, flex approved) |
 
 ## Workload Definition (REQ-PWR-02 detail)
 
