@@ -11,7 +11,7 @@ The cyberdeck is authorized for **passive, lawful** wireless surveying and wardr
 
 | Item | Original target (TASK.md) | Approved baseline | Status |
 |---|---|---|---|
-| Closed external dimensions | 13 × 17 × 4 cm (884 cm³) | **13 × 17 × 5 cm (1105 cm³)** | Changed, approved |
+| Closed external dimensions | 13 × 17 × 4 cm (884 cm³) | **~20 × 14 × 5–5.5 cm (~1400–1540 cm³)** — approved: 8" panel + 3/3/3/10 mm bezels (2026-08-30) | Changed, approved |
 | Form factor | (not specified) | **Clamshell, normal laptop style** | Defined by user |
 | Internal Wi-Fi "6MB" | ambiguous | **≥6 MB/s (~48 Mbit/s) throughput** with PCB/ceramic antenna | Clarified |
 
@@ -23,7 +23,7 @@ IDs are stable and used across all project assets. `Type` follows TASK.md discip
 | ID | Requirement | Type |
 |---|---|---|
 | REQ-AUTH-01 | Passive/legal wireless surveying only; no unauthorized access, disruption, interception, exploitation, concealment, evasion. | Hard (safety/legal, non-negotiable) |
-| REQ-ENC-01 | Closed envelope ≤ 130 × 170 × 50 mm. | Hard (approved change from 40 mm) |
+| REQ-ENC-01 | Closed envelope ≤ ~200 × 140 × 50 mm (≤55 with 7 mm heatsink); 3 mm top/left/right bezel + 10 mm bottom on the lid for the 8" panel. | Hard (approved change from 130×170×50) |
 | REQ-ENC-02 | Clamshell form factor (normal laptop). | Hard |
 | REQ-ENC-03 | No internal speaker, microphone, or camera. | Hard |
 
@@ -40,8 +40,8 @@ IDs are stable and used across all project assets. `Type` follows TASK.md discip
 ### Display & Human Interface
 | ID | Requirement | Type |
 |---|---|---|
-| REQ-DISP-01 | Display ~8", 4:3, ≥ 720p at 30 Hz; **interface = MIPI-DSI or similar; ≥ 100 ppi | Preference |
-| REQ-DISP-02 | Brightness ~1200 nits target; practically, daylight-visible panel preferred (≥ ~500–800 nits realistic for an 8" 4:3 panel). | Preference (user relaxed 1200 nits) |
+| REQ-DISP-01 | Display ~8", MIPI-DSI 800×1280 (5:8), ≥ 100 ppi (**Raystar RFU800G-AYH-MNN, 189 ppi**); 4:3 original target preserved as preference. | Preference (panel chosen) |
+| REQ-DISP-02 | Brightness ~1200 nits original target; **chosen panel = Raystar RFU800G-AYH-MNN @ 1125 nits** (brightest in list, ~daylight-visible at working PWM). | Preference (exceeds 500–800 practical) |
 | REQ-KB-01 | Keyboard ≥ 5 rows (+ up to ½ row of function keys), min ~8 mm per key, US legends with ISO/German-style Enter, integrated trackball **placed between G-H-B (below space bar)**. | Preference |
 | REQ-KB-02 | Audio out only: 3.5 mm AUX + Bluetooth (no internal speaker). | Hard (paired with REQ-ENC-03) |
 

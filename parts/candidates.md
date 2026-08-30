@@ -49,19 +49,20 @@ Evidence (Toradex datasheet Rev 1.8 dated 2026-06-22, docs.toradex.com/116795; p
 - PCIe Gen3 ×1 ≈ 985 MB/s theoretical → low/mid-range NVMe is ideal; prefer DRAM-less low-power models.
 - Exact NVMe model + price: **TBD** (Phase 4 cont / Phase 5). Many 2280s available (~€40–90). Budget row in §ref.
 
-## 4. Display (chosen: cheapest — DEC-035 / A-028)
+## 4. Display (chosen: Raystar RFU800G-AYH-MNN — brightest 1125 nit, DEC-044)
 
-### Leading: Hardkernel Vu8S (8" 800×1280 DSI kit) — $39 official, in stock
-- 4-lane MIPI-DSI (native to Verdin), 189 ppi, 5:8 portrait (NOT 4:3 — accepted per "cheaper").
-- Backlight + driver included; touch optional. Brightness **unstated (~300–400 nit class; TBD — bench to confirm)** vs daylight-visible target.
-- Powershare note: backlight power TBD; measure at working brightness for 30 h budget.
+### Selected: Raystar RFU800G-AYH-MNN
+- 800×1280 (5:8 portrait, 16:10 landscape), 189 ppi, **MIPI-DSI 4-lane** (native to Verdin), **1125 cd/m²**.
+- OD **115.74 × 184.93 × 4.75 mm** (module incl. backlight), active 107.64×172.22 mm.
+- Backlight: ~4.32 W max @1125 nit; **~2.2 W @ ~50% PWM (≈560 nit)** — fits the ~2.5 W display budget at working brightness.
+- Price quote-only (~$35–60, stale, E-014). Panel OD drives the new envelope (DEC-043).
 
-### Upgrade alternatives (if brightness or 4:3 matters more than price)
-| Panel | Res/ppi | Ratio | I/F | Brightness | Price | Notes |
-|---|---|---|---|---|---|---|
-| **HE080IA-01E** | 1024×768 / 160 | **4:3** | DSI 4-lane | bare cell — needs backlight | ~$20–35 (stale) | true 4:3; BL power TBD |
-| HOTHMI HTM-H080D14-LVDS-A01R | 1024×768 / 160 | 4:3 | LVDS | 1000 nit | ~$45–70 (stale) | needs LVDS driver (Verdin has DSI/HDMI) |
-| Raystar RFU800G-AYH-MNN | 800×1280 / 189 | 5:8 | DSI | 1125 nit | ~$35–60 (stale) | brightest DSI |
+### Upgrade/alternatives (if price/ratio matter more)
+| Panel | Res/ppi | Ratio | I/F | Brightness | Notes |
+|---|---|---|---|---|---|
+| **HE080IA-01E** | 1024×768 / 160 | 4:3 | DSI 4-lane | bare cell — needs backlight | true 4:3; BL power TBD |
+| HOTHMI HTM-H080D14-LVDS-A01R | 1024×768 / 160 | 4:3 | LVDS | 1000 nit | needs LVDS driver |
+| Hardkernel Vu8S | 800×1280 / 189 | 5:8 | DSI kit | ~300–400 nit (TBD) | cheapest ($39), brightness unstated |
 
 ## 5. LTE modem (cheapest, private use — DEC-026/030)
 

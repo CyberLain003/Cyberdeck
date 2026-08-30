@@ -17,7 +17,7 @@ Status: **Draft** — 2026-08-30. Every figure is a **snapshot**, re-verify befo
 |---|---|---|---|
 | B-001 | Verdin i.MX 8M Plus 8GB (00701100) | 1 | 489 |
 | B-002 | NVMe — **user-owned** | 0 | 0 |
-| B-004 | Hardkernel Vu8S + ship + VAT + handling | 1 | 62 |
+| B-004 | Raystar RFU800G-AYH-MNN (1125 nit, DSI) + ship + VAT + handling | 1 | 65 |
 | B-005/6 | Carrier PCB (user design, online fab; assembly user/SMT-opt) | 1 | 130 |
 | B-007 | Molicel P50B ×8 (akkuteile.de, DE) | 8 | 76 |
 | B-008 | 2× BMS/pack PCBs + wiring + contacts | 2 | 70 |
