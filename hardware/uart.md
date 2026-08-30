@@ -57,11 +57,17 @@ Physical envelope: magnetic pogo set in the **rear I/O zone** of the daughterboa
 | 5 | SPARE / NC (future: 2nd UART, RTS/CTS, or flow control) | — | NC | Reserved; **must stay unconnected in this design** |
 | 6 | **DET** / cable-presence (optional) | — | pulled-low sense | Shorts to GND in a *compliant* user cable; alt. = Hall/reed switch under magnet. Optional in v1 |
 
-> **PROPOSAL STATUS:** Pin map is a proposal, not a release. User must confirm: (a) 4-pin minimal (TX/RX/GND) vs 6-pin; (b) whether a DET/presence pin is wanted or cable-presence shall be sensed off the GND-pinto-magnet geometry; (c) the +VCCO pin **exists but stays disabled by default** (recommended) vs omitted entirely.
+> **PROPOSAL STATUS (superseded by DEC-047):** pin map is **6-pin, software-controlled** (user 2026-08-30). Controls exposed as bit-files on the SoM; 0 = default/safe:
+> - `send_power`: 0 = **off** (default), 1 = on (dedicated, fused, MCU-gated +VCCO path — SAFETY GATE)
+> - `logic_level`: 0 = **3.3 V** (default), 1 = 5 V (level-shift VCCB)
+> - `power_level`: 0 = **safest/lowest** (default; e.g., 3.3 V low-current via fused PPTC), 1 = higher (e.g., 5 V/higher current — SAFETY GATE)
+> Software path: SoM Linux (configfs/sysfs bit-files) → power-MCU over I2C → UART front-end gates (load switch + VCCO mux + current-limited regulator). File/symlink naming proposed: `/sys/kernel/cyberdeck/uart/{send_power,logic_level,power_level}` (write 0/1). See §9.3.
+> DET/presence pin retained on pin 6 (cable-present sense).
 
 Cable guidance for user-built cables (documented in the build guide, not here):
 - Core default cable: **3-wire, TX–RX crossed, GND common**, 26–28 AWG, length ≤ ~0.5 m for ≤1 Mbit/s.
 - Reversal of TX/RX is electrically harmless (verified in §7 matrix) but logged; a reversed cable simply sees no traffic.
+- 6-pin cable: add +VCCO + DET leads for the gated power path when the user enables it.
 
 ---
 
@@ -259,26 +265,42 @@ First column = connection scenario. "MCU" = power-manager MCU; `PWR_OE` = level-
 | T-09 Unpowered target | Target rail off, deck on | No crash, no current beyond µA | REQ-UART-01 |
 | T-10 +VCCO gate (only post-review) | Enable via MCU+physical; short VCCO to GND | PPTC trips, FAULT latches, no rail disturbance on deck | REQ-UART-01 (power gate) |
 | T-11 1 Mbit/s integrity | 921600 baud loopback with 0.5 m cable | BER 0; edge τ ≤ 0.1 bit | REQ-UART-02 (server/console speeds) |
+| T-12 Software control defaults | Boot; read `/sys/kernel/cyberdeck/uart/*` | send_power=0, logic_level=0 (3.3 V), power_level=0 | REQ-UART-01, DEC-047 |
+| T-13 Software control toggles | Write 0/1 to each file; observe hardware gates | Each bit changes the load switch / VCCO mux / regulator accordingly; symlink-able paths | REQ-UART-01, DEC-047 |
+| T-14 6-pin cable | Full cable incl. +VCCO + DET; enable send_power=1 | DET senses cable, power path works after gate | REQ-UART-01/02 |
 
 All T0x results recorded in `tests/` with date/rig; failures open a risk-register row (RISK-xxx) and revisit this doc.
+
+---
+
+## 9.1 Software-controlled bit interface (REQ-UART-01, DEC-047)
+
+- Exposed on the SoM as **bit-files** (configfs/sysfs or a thin driver), each accepting `0`/`1`; write-guarded (root) and symlink-friendly paths:
+  - `/sys/kernel/cyberdeck/uart/send_power` — 0 = off (default), 1 = on (gated +VCCO, SAFETY GATE)
+  - `/sys/kernel/cyberdeck/uart/logic_level` — 0 = 3.3 V (default), 1 = 5 V
+  - `/sys/kernel/cyberdeck/uart/power_level` — 0 = safest/lowest (default), 1 = higher (SAFETY GATE)
+- Path: SoM kernel → I2C to power-manager MCU → load switch (send_power), VCCO mux (logic_level), current-limit regulator (power_level).
+- Defaults on boot: **all 0** (port inert, 3.3 V, safest). Files reflect actual state (read-back) and reject invalid writes.
+- User-facing convenience: symlinks like `/dev/cyberdeck-uart/power` are acceptable if desired; the canonical path is the sysfs below. Full spec lands in `software/` (Phase 7).
 
 ---
 
 ## 10. Summary and open questions
 
 **Summary of this design:**
-- 6-pin magnetic pogo **proposal** (default = 3-wire TX/RX/GND); +VCCO pin reserved **disabled by default (SAFETY GATE)**.
+- **6-pin** magnetic pogo (DEC-047 confirmed): TX/RX/GND + +VCCO (gated) + SPARE + DET.
+- **Software-controlled bits** (files/symlinks: send_power, logic_level, power_level; 0 = off / 3.3 V / safest) — DEC-047.
 - Level shift: **TXS0108EPWR** (primary) / **TXB0108PWR** (preferred if hot-target priority) auto-direction, VCCA 3.3 V fixed, VCCB switched 3.3/5 V by power-MCU via load switch; OE default-low keeps port inert. Discrete BSS138 cell documented as fallback.
 - Protection: series 330 Ω ×2 + TPD4E05U06 (±12 kV IEC, GND-clamp) at the head; **no PPTC on signal lines**; PPTC (MF-MSMF050 0.5 A) only on the gated +VCCO path.
-- Power-manager MCU owns enable/seq/supervise/LED; port boots dead.
-- Test plan maps T-01…T-11 to REQ-UART-01/02.
+- Power-manager MCU owns enable/seq/supervise/LED; port boots dead (all bits 0).
+- Test plan maps T-01…T-14 to REQ-UART-01/02 + software interface.
 
 **Open questions for the user (reply required before Phase-6 PCB work):**
-1. **Pin complement:** 4-pin (TX/RX/GND) vs 6-pin (adds +VCCO, SPARE, DET)? Confirm the proposal or override. **(Pin-map is TBD until this.**
-2. **TXS vs TXB:** do you prioritize cheaper/more-common TXS0108E, or the hot-target-safe (Ioff/VCC-isolation) TXB0108? Both fit.
-3. **Target power:** keep +VCCO as an explicitly gated, DNP-until-reviewed option (recommended), or omit the pin entirely from v1 (strictest possible "signal+GND only")?
-4. **Isolation:** was `TISO1800` a real part you meant, or is digital isolation (ISO7721-class) on the table at all? Assume shared-GND unless you say otherwise.
-5. **Cable presence:** DET pin or magnet/Hall sensing — which for v1?
+1. ~~Pin complement~~ → **resolved: 6-pin (DEC-047)**.
+2. **TXS vs TXB:** prefer cheaper/more-common TXS0108E, or hot-target-safe (Ioff/VCC-isolation) TXB0108? Both fit.
+3. **Target power:** keep +VCCO as explicitly gated, DNP-until-reviewed (recommended) — confirmed in DEC-047; the software bit `send_power` gates it.
+4. **Isolation:** assume shared-GND unless you say otherwise.
+5. **Cable presence:** DET pin (recommended) vs magnet/Hall sensing — pick for v1.
 6. **Mechanical pointer (mechanical/port-io-zone.md)** — confirm it will be authored alongside this doc.
 
 ---

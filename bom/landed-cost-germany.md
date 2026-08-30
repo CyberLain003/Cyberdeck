@@ -24,7 +24,7 @@ Status: **Draft** — 2026-08-30. Every figure is a **snapshot**, re-verify befo
 | B-009 | BQ25713RSNR charger | 1 | 4 |
 | B-010 | STUSB4500 sink | 1 | 1.2 |
 | B-011 | Quectel EC25-EUX LTE | 1 | 37 |
-| B-012 | RTL8821CU Wi-Fi module | 1 | 9 |
+| B-012 | Wi-Fi — on SoM (WB); USB2 hub + deck MCU | — | 13 |
 | B-013/14 | Sunon fan + heatsink | 1+1 | 11 |
 | B-015 | Keyboard membrane (custom) | 1 | 45 |
 | B-016 | ADNS-9800 trackball sensor | 1 | 3 |

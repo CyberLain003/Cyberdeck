@@ -74,14 +74,12 @@ Evidence (Toradex datasheet Rev 1.8 dated 2026-06-22, docs.toradex.com/116795; p
 
 **EC25-EUX wins**: cheapest, most complete EU bands incl B28, best Linux story. Module RED pre-qualified; final device RED integration responsibility stays (Phase 8).
 
-## 6. Wi-Fi + BT (≥6 MB/s ≈ 48 Mbit/s — REQ-RF-01)
+## 6. Wi-Fi + BT (REQ-RF-01) — provided by the SoM (DEC-046)
 
-| Part | I/F | Bands | Driver (mainline) | Antenna | Price/avail |
-|---|---|---|---|---|---|
-| **RTL8821CU** (pad module BL-M8821CU1 / dongle) ✅ | USB 2.0 | 2.4/5 GHz 802.11ac 1×1, 433 Mbps | **rtw88_usb (≥6.2)** + btusb | onboard PCB antenna variant (or MHF→aperture) | €3.79 dongle / €6.85 pad (AliExpress DE) |
-| RTL8822CS (BL-M8822CS1) | SDIO 3.0 | ac 2×2 866 Mbps | **rtw88_sdio (≥6.4)** | needs MHF external | €7.00 (AliExpress DE) |
-
-- Any candidate vastly exceeds 6 MB/s. Leading = **RTL8821CU USB module**, PCB antenna relocated to an RF window in the aluminum deck (ceramic-antenna variant unverified — plan u.FL→aperture antenna). Firmware in `linux-firmware`.
+- Verdin i.MX 8M Plus **"WB" variant** = Wireless + Bluetooth **on-module** (user-confirmed "there is a wifi module on the som"). No separate RTL8821CU module needed.
+- Carrier routes **antenna coax (U.FL) from the SoM to an RF window** in the aluminum top deck/rear.
+- Throughput: on-module Wi-Fi (802.11ac-class) ≫ 6 MB/s target; mainline drivers (brcmfmac/rtl8xxx/mwifiex depending on module).
+- Verify exact RF module in the WB SoM variant + driver at Phase-4/7 check (TBD).
 
 ## 7. Micro fan (thermal — DEC-017)
 
@@ -110,5 +108,15 @@ Leading = **Sunon axial (quiet, low power)** pushing air across a 5–7 mm finne
 
 ## 10. Trackball sensor (REQ-KB-01)
 
-- **ADNS-9800** laser sensor, SPI, up to 8000 cpi, **€1.25** (AliExpress `1005006588379741`).
-- ⚠ **Ball-size caveat:** ADNS-style sensors are designed around 34–38 mm pool-ball curvature; a **15–21 mm ball is atypical and may give geometric error** — verify with a test mount before locking the mechanical design (open item, Phase 6). User wants trackball *below space, between G/H/B* (DEC-025) → small recessed ball in aluminum deck is the plan, but sensor suitability for small ball is unresolved.
+- **ADNS-9800** laser sensor, SPI, up to 8000 cpi, **€1.25** (AliExpress `1005006588379741`). Read by the deck USB-HID MCU (DEC-045).
+- ⚠ **Ball-size caveat:** ADNS-style sensors are designed around 34–38 mm pool-ball curvature; a **15–21 mm ball is atypical and may give geometric error** — bench-test before locking the deck cutout (RISK-020, DEC-050).
+
+## 11. Deck keyboard MCU (USB-HID, DEC-045)
+
+- **Recommended: STM32G0-class** (Cortex-M0+, USB Full-Speed device, very low power) e.g. **STM32G030/G031/G041**; scans membrane matrix + trackball (SPI), exposes USB-HID keyboard/mouse. ~€2–4, hand-solderable (TSSOP/QFN).
+- Alt: **RP2040** (easy, common, ~€1–2 core module) but higher idle power — acceptable fallback.
+- Runs TinyUSB/LUFA (Phase 7 firmware). Zero host driver + works in U-Boot.
+
+## 12. USB 2.0 hub (DEC-049)
+
+- **Low-power USB2513-class** (3-port USB2 hub) on carrier for: deck MCU (HID), LTE modem (QMI), spare. USB3 dedicated port stays **unshared** (REQ-IO-02). Mouser/DigiKey, ~€3–6. Mainline driver built-in (standard hub).
