@@ -1,80 +1,80 @@
 # Cyberdeck
 
-A compact, fully functional custom cyberdeck — researched, planned, and documented as an evidence-driven engineering project.
+A compact, fully functional custom cyberdeck — designed, engineered and documented as an open, evidence-driven build. Target: a rugged, rainproof, ThinkPad-class palmtop/laptop with a bright daylight-visible screen, 30 h of battery life, and true hot-swap power.
 
-## Project Objective and Authorized Use
+Everything here is a **living engineering record**: requirements, feasibility math, sourced component evidence, BOM + landed-Germany cost model, electrical/mechanical designs, and risk tracking. No purchases are made by this repo — procurement recommendations are staged and gated.
 
-Plan a compact, fully functional custom cyberdeck authorized for:
+---
 
-- **Authorized and legal wardriving and wireless surveying only** (passive, lawful surveying and logging on systems/networks where the user has authorization or observation is legally permitted). Excludes unauthorized access, disruption, credential interception, exploitation, concealment, and evasion.
-- Terminal work and web browsing.
-- Music playback via 3.5 mm AUX or Bluetooth — **no internal speaker**.
-- Note-taking and programming.
-- Authorized hardware/security work using a UART terminal.
+## The machine in one line
 
-## Requirements Baseline (Summary)
+**≈ 200 × 140 × 50 mm clamshell** · 8" 800×1280 @ 1125 nits MIPI-DSI display · Verdin i.MX 8M Plus (8 GB) on a custom carrier · dual 4S 21700 packs (≥120 Wh) with drill-style **hot-swap** battery rails · 30 h runtime target · NixOS · passive-legal wireless surveying workhorse.
 
-| Area | Requirement |
+## Key specs (current design state)
+
+| Area | Spec |
 |---|---|
-| Compute | ≥2 cores, ≥1 GHz CPU; 4–8 GB DDR4+ (8 GB mandatory status under clarification) |
-| Storage | One M.2 2280 **SATA** SSD (B-key or B+M-key — not NVMe M-key) |
-| Display | 8" 4:3, ≥720p @ 30 Hz, ≥1200 nits |
-| Keyboard | Integrated trackball; US labels, ISO/German-style Enter key |
-| I/O | HDMI ≥1080p@30, USB 3.x (≥1 Gbit/s effective), USB 2.0 OTG, 3.5 mm AUX, USB-C PD (65 W), Ethernet ≥100 Mbit/s, full-size SD slot, magnetic pogo-pin UART (switchable 3.3 V/5 V), internal Wi-Fi+BT, EU LTE/5G modem + nano-SIM |
-| Power | ≥120 Wh battery, ≥30 h runtime, swappable/hot-swappable packs |
-| Envelope | ≤13 cm × 17 cm × 4 cm (≈884 cm³) |
-| Linux/NixOS | Full upstream/`linux-firmware` driver support; NixOS fully supported |
+| Compute | Toradex Verdin i.MX 8M Plus, 8 GB LPDDR4, 4× Cortex-A53 @ 1.6 GHz — mainline Linux/U-Boot, **NixOS-friendly (no `config.txt`)** |
+| Display | **Raystar RFU800G-AYH-MNN** — 8" 800×1280, MIPI-DSI 4-lane, **1125 nits** (daylight-visible), 189 ppi |
+| Storage | M.2 2280 NVMe (M-key, PCIe Gen3 ×1) — silkscreen-keyed so only the right drive fits |
+| Battery | **2× 4S 21700** (Molicel P50B), ~144 Wh total, drill-style **hot-swap rails** (ThinkPad power-bridge behavior) |
+| Runtime | ≥ 30 h target: 20 h terminal/idle + 4 h browsing + 6 h locked (work-day + margin) |
+| Cooling | Ducted air path: **left-back intake → 30 mm fan → 5–7 mm heatsink → right-side exhaust** |
+| I/O | HDMI, USB 3.x (unshared, ≥1 Gbit/s), USB 2.0 OTG, GbE, full-size SD, 3.5 mm AUX out, USB-C PD 65 W, **magnetic pogo UART** (3.3/5 V, software-controlled, protected) |
+| Wireless | On-module Wi-Fi + BT (antenna through RF-transparent lid) · **EU LTE** (tiny LGA radio, nano-SIM) |
+| Keyboard | Custom 6-row membrane, US legends + ISO/German Enter, integrated **trackball** below the space bar |
+| Chassis | Black matte anodized **aluminum** (CNC), plastic bezel/lid-top for antennas, **ThinkPad-class hinges**, **rainproof with keyboard drainage** (T480-style) |
+| Sensors | Lid-open Hall sensor + ambient-light sensor (away from screen) for auto brightness |
+| OS | NixOS (plan in progress; mainline kernel/firmware only — no proprietary out-of-tree drivers) |
+| Audio | 3.5 mm AUX out + Bluetooth only — **no internal speaker** (by design) |
 
-## Budget
+## Design highlights
 
-- **Starting budget:** EUR 1,000 landed in Germany (total delivered-to-Germany project budget, unless exclusions are clarified).
+- **True hot-swap:** both 4S packs live on a shared rail via ideal-diode OR-ing; slide a pack out, slide another in — power never drops.
+- **30 h runtime math is done:** at ~3.7 W average, 144 Wh clears the workload with ~+6% margin at the rail; screen and idle power are the levers to watch.
+- **Brightness where it counts:** the 1125-nit panel at ~50 % PWM ≈ 560 nit keeps daylight visibility without eating the runtime budget (~2.2 W).
+- **Safety first:** battery/BMS/hot-swap/PD are treated as safety-critical and require professional review before fabrication. The UART port is *signal + ground only* by default; target power is gated, fused and software-controlled (`send_power` / `logic_level` / `power_level`).
+- **Authorized use only:** wireless surveying is strictly passive and lawful — no unauthorized access or interference. Legal/regulatory review (RED/CE, privacy, battery transport) is a planned phase.
 
-## Critical Feasibility Flags
+## Status
 
-- Fitting ≥120 Wh into the **884 cm³** envelope is a major packing, thermal, and safety constraint.
-- 30 h at 120 Wh implies an average draw of ≤**4 W before conversion losses** — allowable device load is lower after losses and reserve margins.
-- All numerical requirements are validation criteria tracked in a compliance matrix (status: `Pass` / `Partial` / `Fail` / `Unknown`).
+Staged engineering workflow (each phase gated by explicit approval):
 
-## Workflow
+1. ✅ Discovery & clarification
+2. ✅ Feasibility
+3. ✅ Architecture & options
+4. ✅ Sourced component research (cells, SoM, panel, modules — dated evidence)
+5. ✅ BOM & landed-Germany cost (~€1,200 hardware, ≈€1.5k all-in incl. test + contingency)
+6. 🚧 Electrical & mechanical plans (drafts: power tree, hot-swap, carrier, UART, thermal, keyboard, envelope — **some in active revision**)
+7. ⬜ NixOS & software
+8. ⬜ Validation & risk
+9. ⬜ Procurement & build roadmap
 
-Staged, gate-reviewed workflow, each phase requiring approval before advancing:
-
-1. Discovery and clarification
-2. Feasibility
-3. Architecture and options
-4. Sourced component research
-5. BOM and cost
-6. Electrical and mechanical plans
-7. NixOS and software
-8. Validation and risk
-9. Procurement and build roadmap
-
-Comprehensive project detail, full requirements baseline, evidence sources, compliance tracking, and planning assets are maintained in `TASK.md` and the project documentation tree.
-
-## Repository Layout
+## Repository layout
 
 ```
-cyberdeck-project/
 ├── README.md
-├── requirements/   (baseline, compliance matrix)
-├── architecture/   (system, options, interfaces)
-├── hardware/       (compute, display, storage, networking, cellular, keyboard, UART, power, battery, thermal, PCB)
-├── software/       (NixOS, firmware/drivers, applications)
-├── parts/          (candidates, alternatives)
+├── TASK.md              # the original engineering brief / definition of done
+├── requirements/        # baseline + compliance matrix (Pass/Partial/Fail/Unknown)
+├── architecture/        # system overview, options, interfaces, block diagram
+├── hardware/            # compute, display, keyboard, UART, power tree, battery/hot-swap, thermal, PCB
+├── mechanical/          # envelope/z-stack + assembly/serviceability
+├── parts/               # candidates + alternatives (sourced, dated, priced)
 ├── vendors/
-├── bom/            (BOM, landed cost Germany)
-├── mechanical/     (envelope, assembly)
-├── electrical/     (block diagram, protection, charging/runtime)
-├── tests/          (acceptance plan, results)
-├── risks/
-├── decisions/
-├── tools/
-└── info/           (open questions, assumptions, sources, terminology, session handoff)
+├── bom/                 # full BOM + landed cost (Germany)
+├── electrical/          # block diagram, protection, charging/runtime
+├── tests/               # acceptance plan + results (Phase 8)
+├── risks/  decisions/  tools/
+└── info/                # assumptions, open questions, sources, terminology, session handoff
 ```
 
-## Scope and Governance
+## Governance & sourcing notes
 
-- **No purchases** are made by this project; procurement is recommended for approval and staged/gated.
-- Battery, BMS, hot-swap, charging, and USB-C PD subsystems are treated as **safety-critical**; detailed battery construction must be reviewed by a qualified electrical/battery safety engineer before fabrication.
-- Wireless activity is limited to authorized and legal passive surveying; no unauthorized access or interference.
-- All claims are evidence- and source-backed (URL + access date + confidence + stale-price warning where applicable). Unverifiable values are marked `TBD`.
+- **Evidence-driven:** every claim carries a source URL, access date, confidence and a stale-price warning where it matters. Unverifiable values are `TBD`, never guessed.
+- **Budget:** €1,000 planning baseline; flexibility approved for the aluminum shell. Imports from EU/CN/US are priced into the landed model (VAT/duty/shipping).
+- **No purchases by this repo:** procurement is staged, re-quoted at order time, and every price snapshot is dated.
+- Battery pack construction, the hot-swap bridge and charging electronics require a qualified electrical/battery safety engineer review before fabrication.
+
+## License / legal
+
+Engineering documentation for personal, authorized use. All wireless activity limited to lawful, passive observation on networks you are authorized to assess. Battery transport (UN38.3/ADR) and radio compliance (RED/CE) rules apply — details tracked in the plan.

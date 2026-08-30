@@ -24,7 +24,7 @@ IDs are stable and used across all project assets. `Type` follows TASK.md discip
 |---|---|---|
 | REQ-AUTH-01 | Passive/legal wireless surveying only; no unauthorized access, disruption, interception, exploitation, concealment, evasion. | Hard (safety/legal, non-negotiable) |
 | REQ-ENC-01 | Closed envelope ≤ ~200 × 140 × 50 mm (≤55 with 7 mm heatsink); 3 mm top/left/right bezel + 10 mm bottom on the lid for the 8" panel. | Hard (approved change from 130×170×50) |
-| REQ-ENC-02 | Clamshell form factor; **three vertical boards (motherboard, daughterboard, keyboard PCB) linked by FPC/J-connectors; soM on right palm rest (keyboard PCB top ~50%); premium ThinkPad-class hinges (one-finger open, carry by screen); rainproof for hours with keyboard drainage; plastic bezel + plastic lid-top behind screen for antennas, metal edges/rims** | Hard |
+| REQ-ENC-02 | Clamshell (landscape palmtop/laptop, 200 mm width); **three horizontal flat boards** (keyboard PCB top, carrier motherboard, rear daughterboard) via FPC/J-connectors; **keyboard at regular-laptop position (10% from top, ends 40% from bottom)**, soM + thermal tower on right palm-rest; premium ThinkPad-class hinges (one-finger open, carry by screen); **rainproof for hours with keyboard drainage**; plastic bezel + plastic lid-top behind screen for antennas, metal edges/rims; **cooling air: left-back intake channels → low-pressure draw → 30 mm fan → 5–7 mm heatsink → right exhaust**; drill-rail hot-swap batteries; **minimal mechanical changes permitted for fit** | Hard |
 | REQ-ENC-03 | No internal speaker, microphone, or camera. | Hard |
 
 ### Compute, Memory, Storage

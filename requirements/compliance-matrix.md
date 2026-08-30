@@ -16,7 +16,7 @@ Status states: `Pass`, `Partial`, `Fail`, `Unknown` only. This matrix is updated
 | REQ-IO-03 | I/O | USB 2.0 OTG | Preference | Test | Partial | Verdin native USB 2.0 OTG (E-009) | High | Dual-role port on custom carrier | I/O topology Phase 6 |
 | REQ-IO-04 | I/O | Ethernet ≥100 Mbit | Preference | Test | Partial | Verdin dual GbE (RGMII or on-module PHY, E-009) — exceeds requirement | High | Native GMAC2 via RGMII | I/O topology Phase 6 |
 | REQ-IO-05 | I/O | Full-size SD slot | Preference | Test | Unknown | carrier add-on (SDIO) | Med | low risk | I/O topology Phase 6 |
-| REQ-ENC-02 | Envelope | Clamshell; **black matte anodized aluminum chassis (metal edges/rims; plastic bezel + plastic lid-top behind screen for antennas); micro fan + 5–7 mm heatsink; front battery insertion; three vertical boards (motherboard/daughterboard/keyboard PCB) w/ SoM on right palm rest; ThinkPad-class hinges; rainproof w/ keyboard drainage** | Hard | Design review | Partial | DEC-016/017/018/052/053/054/055/056/023; CNC local no labor cost | Medium | Mechanical re-derive for vertical stack + palm-rest SoM + plastic lid-top + rainproof | Mechanical re-derive Phase 6 |
+| REQ-ENC-02 | Envelope | Clamshell landscape; **flat horizontal boards; keyboard 10%/40%; SoM palm-rest w/ thermal tower; left-back→fan→right exhaust air path; drill-rail batteries; TP hinges; rainproof; plastic lid-top** | Hard | Design review | Partial | DEC-052/053/054/055/056/060/061/062/063; CNC local no labor cost | Med | Mechanical re-derive (round 2) + thermal ducting | Mechanical/thermal re-engineer |
 
 ## Consistency note
 
